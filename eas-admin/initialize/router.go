@@ -7,8 +7,8 @@ import (
 	"admin/middleware"
 )
 
-func Routers() {
-	r := gin.Default()
+func Routers() (r *gin.Engine) {
+	r = gin.Default()
 	r.Use(middleware.Cors())
 
 	r.Use(middleware.Cors())
@@ -18,8 +18,5 @@ func Routers() {
 		router.InitSystemRouter(publicGroup)
 	}
 
-	err := r.Run(":8080")
-	if err != nil {
-		panic(err)
-	}
+	return
 }
