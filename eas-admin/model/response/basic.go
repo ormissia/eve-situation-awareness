@@ -3,12 +3,49 @@ package response
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"admin/utils"
 )
 
-type Response struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+type response struct {
+	Code utils.ResponseCode `json:"code"`
+	Msg  string             `json:"msg"`
+	Data interface{}        `json:"data"`
+}
+
+type responseCtx struct {
+	ctx      *gin.Context
+	response response
+}
+
+func (r *responseCtx) responseBase() {
+	r.ctx.JSON(int(r.response.Code), r.response)
+}
+
+// SuccessResponse 返回成功的同一封装
+func SuccessResponse(c *gin.Context, data interface{}) {
+	rc := &responseCtx{
+		ctx: c,
+		response: response{
+			Code: http.StatusOK,
+			Msg:  "Successful",
+			Data: data,
+		},
+	}
+	rc.responseBase()
+}
+
+// ErrorResponse 返回错误的统一封装
+func ErrorResponse(c *gin.Context, errCode utils.ResponseCode) {
+	rc := &responseCtx{
+		ctx: c,
+		response: response{
+			Code: http.StatusOK,
+			Msg:  utils.GetResponseMsg(errCode),
+			Data: nil,
+		},
+	}
+	rc.responseBase()
 }
 
 type PageResult struct {
@@ -16,17 +53,4 @@ type PageResult struct {
 	PageNum  int         `json:"pageNum"`
 	PageSize int         `json:"pageSize"`
 	List     interface{} `json:"list"`
-}
-
-func (r *Response) response(c *gin.Context, code int) {
-	c.JSON(code, r)
-}
-
-func SuccessResponse(c *gin.Context, data interface{}) {
-	r := Response{
-		Code: http.StatusOK,
-		Msg:  "Successful",
-		Data: data,
-	}
-	r.response(c, http.StatusOK)
 }

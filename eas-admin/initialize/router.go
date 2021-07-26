@@ -9,13 +9,18 @@ import (
 
 func Routers() (r *gin.Engine) {
 	r = gin.Default()
-	r.Use(middleware.Cors())
+	baseGroup := r.Group("admin")
+	baseGroup.Use(middleware.Cors())
 
-	r.Use(middleware.Cors())
-
-	publicGroup := r.Group("/admin")
+	publicGroup := baseGroup.Group("")
 	{
 		router.InitSystemRouter(publicGroup)
+	}
+
+	privateGroup := baseGroup.Group("")
+	privateGroup.Use(middleware.JWT()).Use(middleware.Casbin())
+	{
+		router.InitUserRouter(privateGroup)
 	}
 
 	return

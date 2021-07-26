@@ -19,9 +19,17 @@ zap:
 
 # mysql configuration
 mysql:
-  path:
-  dbname:
-  username:
-  password:
+  path: 127.0.0.1
+  dbname: eas_admin
+  username: root
+  password: 123
   max-idle-conns: 10
   max-open-conns: 100
+
+# mysql configuration
+redis:
+  path:
+
+# casbin configuration
+casbin:
+  model-path: rbac_model.conf

@@ -6,8 +6,8 @@ type Zap struct {
 	Prefix        string `mapstructure:"prefix"`         // 前缀
 	Director      string `mapstructure:"director"`       // 日志文件夹
 	LinkName      string `mapstructure:"link-name"`      // 软链接名称
-	ShowLine      bool   `mapstructure:"show-line"`      // 显示行
 	EncodeLevel   string `mapstructure:"encode-level"`   // 编码级
 	StacktraceKey string `mapstructure:"stacktrace-key"` // 栈名
+	ShowLine      bool   `mapstructure:"show-line"`      // 显示行
 	LogInConsole  bool   `mapstructure:"log-in-console"` // 输出控制台
 }

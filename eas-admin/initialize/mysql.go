@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -11,6 +12,7 @@ import (
 func Mysql() (db *gorm.DB) {
 	m := global.EASConfig.Mysql
 	if m.DBName == "" {
+		global.EASLog.Warn("Mysql connect failed: need DBName conf")
 		return nil
 	}
 
@@ -24,11 +26,13 @@ func Mysql() (db *gorm.DB) {
 		SkipInitializeWithVersion: false, // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
+		global.EASLog.Error("Mysql connect failed:", zap.String("err:", err.Error()))
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		global.EASLog.Info("Mysql connect Successful!")
 		return db
 	}
 }

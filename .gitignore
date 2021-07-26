@@ -1,5 +1,7 @@
 # IDEA缓存
 .idea
+# log日志文件
+log
 
 # MacOS缓存
 .DS_Store

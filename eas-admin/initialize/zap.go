@@ -39,18 +39,61 @@ func Zap() (logger *zap.Logger) {
 		level = zap.InfoLevel
 	}
 
-	//if level == zap.DebugLevel || level == zap.ErrorLevel {
-	//	logger = zap.New(getEncoderCore(), zap.AddStacktrace(level))
-	//} else {
-	//	logger = zap.New(getEncoderCore())
-	//}
-	//if global.GVA_CONFIG.Zap.ShowLine {
-	//	logger = logger.WithOptions(zap.AddCaller())
-	//}
+	if level == zap.DebugLevel || level == zap.ErrorLevel {
+		logger = zap.New(getEncoderCore(), zap.AddStacktrace(level))
+	} else {
+		logger = zap.New(getEncoderCore())
+	}
+	if global.EASConfig.Zap.ShowLine {
+		logger = logger.WithOptions(zap.AddCaller())
+	}
 	return
 }
 
 // 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format(global.EASConfig.Zap.Prefix + "2006/01/02 - 15:04:05.000"))
+	enc.AppendString(t.Format(global.EASConfig.Zap.Prefix + global.EASConfig.Server.TimeFormat))
+}
+
+// getEncoder 获取zapcore.Encoder
+func getEncoder() zapcore.Encoder {
+	if global.EASConfig.Zap.Format == "json" {
+		return zapcore.NewJSONEncoder(getEncoderConfig())
+	}
+	return zapcore.NewConsoleEncoder(getEncoderConfig())
+}
+
+// getEncoderConfig 获取zapcore.EncoderConfig
+func getEncoderConfig() (config zapcore.EncoderConfig) {
+	config = zapcore.EncoderConfig{
+		MessageKey:     "message",
+		LevelKey:       "level",
+		TimeKey:        "time",
+		NameKey:        "logger",
+		CallerKey:      "caller",
+		StacktraceKey:  global.EASConfig.Zap.StacktraceKey,
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     CustomTimeEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.FullCallerEncoder,
+	}
+	switch {
+	case global.EASConfig.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
+		config.EncodeLevel = zapcore.LowercaseLevelEncoder
+	case global.EASConfig.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
+		config.EncodeLevel = zapcore.LowercaseColorLevelEncoder
+	case global.EASConfig.Zap.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
+		config.EncodeLevel = zapcore.CapitalLevelEncoder
+	case global.EASConfig.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
+		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	default:
+		config.EncodeLevel = zapcore.LowercaseLevelEncoder
+	}
+	return config
+}
+
+// getEncoderCore 获取Encoder的zapcore.Core
+func getEncoderCore() (core zapcore.Core) {
+	return zapcore.NewCore(getEncoder(), os.Stdout, level)
 }
