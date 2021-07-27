@@ -15,6 +15,7 @@ func Routers() (r *gin.Engine) {
 	publicGroup := baseGroup.Group("")
 	{
 		router.InitSystemRouter(publicGroup)
+		router.InitBaseRouter(publicGroup)
 	}
 
 	privateGroup := baseGroup.Group("")

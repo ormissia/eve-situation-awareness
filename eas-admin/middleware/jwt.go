@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"strconv"
 	"strings"
 	"time"
@@ -55,7 +56,7 @@ func JWT() gin.HandlerFunc {
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
 			//单点登录拦截
 			if global.EASConfig.Server.UseMultipoint {
-			//TODO 单点登录逻辑
+				//TODO 单点登录逻辑
 			}
 		}
 
@@ -69,12 +70,14 @@ var (
 	TokenInvalid = errors.New("Token invalid! ")
 )
 
-var jwtKey = []byte(global.EASConfig.JWT.SigningKey)
+func GetJWTKey() (jwtKey []byte) {
+	return []byte(global.EASConfig.JWT.SigningKey)
+}
 
 // ParseToken 解析token
 func ParseToken(tokenStr string) (claims *request.CustomClaims, err error) {
-	token, err := jwt.ParseWithClaims(tokenStr, claims,
-		func(token *jwt.Token) (interface{}, error) { return jwtKey, nil })
+	token, err := jwt.ParseWithClaims(tokenStr, &request.CustomClaims{},
+		func(token *jwt.Token) (interface{}, error) { return GetJWTKey(), nil })
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +94,10 @@ func ParseToken(tokenStr string) (claims *request.CustomClaims, err error) {
 // ReleaseToken 生成token
 func ReleaseToken(claims request.CustomClaims) (tokenStr string, err error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err = token.SignedString(global.EASConfig.JWT.SigningKey)
+	tokenStr, err = token.SignedString(GetJWTKey())
+	if err != nil {
+		global.EASLog.Error("Token SignedString failed:", zap.Any("err:", err))
+	}
 	return
 }
 
