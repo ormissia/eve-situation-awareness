@@ -19,10 +19,11 @@ zap:
 
 # mysql configuration
 mysql:
-  path: 127.0.0.1
-  dbname: eas_admin
-  username: root
-  password: 123
+  path:
+  dbname:
+  username:
+  password:
+  config: charset=utf8&parseTime=True&loc=Local
   max-idle-conns: 10
   max-open-conns: 100
 

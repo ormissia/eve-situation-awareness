@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"context"
+
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 
@@ -21,7 +22,7 @@ func Redis() (rdb *redis.Client) {
 		global.EASLog.Error("redis connect ping failed, err:", zap.Any("err", err))
 		rdb = nil
 	} else {
-		global.EASLog.Info("redis connect ping response:", zap.String("pong", pong))
+		global.EASLog.Info("redis connect ping response:", zap.String("ping", pong))
 		rdb = client
 	}
 	return

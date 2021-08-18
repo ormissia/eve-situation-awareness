@@ -1,8 +1,9 @@
 package response
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 
 	"admin/utils"
 )
@@ -42,6 +43,19 @@ func ErrorResponse(c *gin.Context, errCode utils.ResponseCode) {
 		response: response{
 			Code: http.StatusOK,
 			Msg:  utils.GetResponseMsg(errCode),
+			Data: nil,
+		},
+	}
+	rc.responseBase()
+}
+
+// ErrorResponseCustom 返回错误的统一封装
+func ErrorResponseCustom(c *gin.Context, errCode utils.ResponseCode, msg string) {
+	rc := &responseCtx{
+		ctx: c,
+		response: response{
+			Code: http.StatusOK,
+			Msg:  msg,
 			Data: nil,
 		},
 	}

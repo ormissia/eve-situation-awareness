@@ -10,5 +10,6 @@ func InitSystemRouter(r *gin.RouterGroup) {
 	systemGroup := r.Group("/system")
 	{
 		systemGroup.GET("/ping", v1.Ping)
+		systemGroup.POST("/initDB", v1.InitMySQL)
 	}
 }

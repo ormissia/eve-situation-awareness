@@ -10,12 +10,9 @@
 ![Open Pull Requests](https://img.shields.io/github/issues-pr/ormissia/eve-analysis-system?color=yellowgreen)
 ![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/ormissia/eve-analysis-system)
 
-
 ---
 
 ![framework](https://raw.githubusercontent.com/ormissia/image-hosting/master/eve-analysis-system/framework.png)
 
 
-
 ---
-

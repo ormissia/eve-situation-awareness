@@ -35,6 +35,8 @@ const (
 
 	// ErrServerError 处理错误
 	ErrServerError ResponseCode = 1200 + iota
+	ErrUserNotFound
+	ErrUserNotFoundOrErr
 
 	//数据错误
 
@@ -50,6 +52,9 @@ var responseMsgMap = map[ResponseCode]string{
 
 	ErrCodeParamError:        "参数错误",
 	ErrCodeMissingParamError: "缺少参数",
+
+	ErrUserNotFound:      "用户不存在",
+	ErrUserNotFoundOrErr: "用户不存在或密码错误",
 
 	ErrCodeMySQLError: "数据库错误",
 }
