@@ -60,7 +60,10 @@ func InitDB(conf request.InitDB) (err error) {
 	}
 
 	// 初始化表数据
-	if err = initData(source.User); err != nil {
+	if err = initData(
+		source.User,
+		source.Casbin,
+	); err != nil {
 		global.EASMySql = nil
 		return err
 	}

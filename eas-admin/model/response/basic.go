@@ -20,7 +20,7 @@ type responseCtx struct {
 }
 
 func (r *responseCtx) responseBase() {
-	r.ctx.JSON(int(r.response.Code), r.response)
+	r.ctx.JSON(http.StatusOK, r.response)
 }
 
 // SuccessResponse 返回成功的同一封装
@@ -41,7 +41,7 @@ func ErrorResponse(c *gin.Context, errCode utils.ResponseCode) {
 	rc := &responseCtx{
 		ctx: c,
 		response: response{
-			Code: http.StatusOK,
+			Code: errCode,
 			Msg:  utils.GetResponseMsg(errCode),
 			Data: nil,
 		},
@@ -54,7 +54,7 @@ func ErrorResponseCustom(c *gin.Context, errCode utils.ResponseCode, msg string)
 	rc := &responseCtx{
 		ctx: c,
 		response: response{
-			Code: http.StatusOK,
+			Code: errCode,
 			Msg:  msg,
 			Data: nil,
 		},

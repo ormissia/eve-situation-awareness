@@ -15,7 +15,7 @@ var User = new(user)
 type user struct{}
 
 var admins = []model.User{
-	{EASBase: model.EASBase{ID: 1, CreateTime: time.Now(), UpdateTime: time.Now()}, UUID: uuid.NewV4(), Username: "admin", Password: "e10adc3949ba59abbe56e057f20f883e", NickName: "超级管理员", HeaderImg: "http://qmplusimg.henrongyi.top/gva_header.jpg", AuthorityId: "888"},
+	{EASBase: model.EASBase{ID: 1, CreateTime: time.Now(), UpdateTime: time.Now()}, UUID: uuid.NewV4(), Username: "admin", Password: "e10adc3949ba59abbe56e057f20f883e", NickName: "超级管理员", HeaderImg: "https://imageserver.eveonline.com/Character/2115581995_1024.jpg", AuthorityId: "2115581995"},
 }
 
 func (a *user) Init() error {
@@ -28,7 +28,7 @@ func (a *user) Init() error {
 			// 遇到错误时回滚事务
 			return err
 		}
-		global.EASLog.Info("表的初始数据已存在")
+		global.EASLog.Info("表初始化成功")
 		return nil
 	})
 }

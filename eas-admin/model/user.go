@@ -2,6 +2,7 @@ package model
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 
 	"admin/global"
 )
@@ -22,10 +23,25 @@ func (User) TableName() string {
 	return "user"
 }
 
+// AfterFind 每次查询后清空密码
+func (u *User) AfterFind(tx *gorm.DB) (err error) {
+	u.Password = ""
+	return
+}
+
 func (u *User) Login() (user User, err error) {
 	db := global.EASMySql.Model(u)
 
 	db = db.Where("username = ?", u.Username).Where("password = ?", u.Password)
+	err = db.Find(&user).Error
+
+	return
+}
+
+func (u *User) SelectUserByUUID(uuid string) (user User, err error) {
+	db := global.EASMySql.Model(u)
+
+	db = db.Where("uuid = ?",uuid)
 	err = db.First(&user).Error
 
 	return

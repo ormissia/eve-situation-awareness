@@ -1,12 +1,13 @@
 package middleware
 
 import (
-	"fmt"
+	"strings"
+	"sync"
+
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"sync"
 
 	"admin/global"
 	"admin/model/request"
@@ -28,10 +29,13 @@ func Casbin() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		fmt.Println(claims)
 		waitUse := claims.(*request.CustomClaims)
-		// 获取请求的URI
-		obj := c.Request.URL.RequestURI()
+		// 获取请求的URI并去除Query参数
+		reqURL := c.Request.URL.RequestURI()
+		obj := ""
+		if urls := strings.Split(reqURL, "?"); len(urls) > 0 {
+			obj = urls[0]
+		}
 		// 获取请求方法
 		act := c.Request.Method
 		// 获取用户的角色
@@ -62,8 +66,8 @@ func initCasbinEnforcer() *casbin.SyncedEnforcer {
 			global.EASLog.Error("Casbin syncedEnforcer failed:", zap.String("err:", err.Error()))
 			return
 		}
-		//TODO
-		//syncedEnforcer.AddFunction("ParamsMatch", casbinService.ParamsMatchFunc)
+		// TODO
+		// syncedEnforcer.AddFunction("ParamsMatch", casbinService.ParamsMatchFunc)
 	})
 	_ = syncedEnforcer.LoadPolicy()
 	return syncedEnforcer

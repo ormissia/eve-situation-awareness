@@ -14,21 +14,30 @@ import (
 	"admin/utils"
 )
 
+// GetUserInfo 获取任一用户的信息
 func GetUserInfo(c *gin.Context) {
-	response.SuccessResponse(c, "user")
+	uuid := c.Query("uuid")
+
+	user, err := new(model.User).SelectUserByUUID(uuid)
+	if err != nil {
+		response.ErrorResponseCustom(c, utils.ErrCodeParamError, "未找到用户")
+		return
+	}
+
+	response.SuccessResponse(c, user)
 }
 
 func Login(c *gin.Context) {
-	var l = request.Login{}
-	err := c.ShouldBind(&l)
+	var param = request.Login{}
+	err := c.ShouldBind(&param)
 	if err != nil {
-		response.ErrorResponse(c, utils.ErrPermissionDenied)
+		response.ErrorResponse(c, utils.ErrCodeMissingParamError)
 		return
 	}
-	//验证
+	// TODO 验证
 	u := &model.User{
-		Username: l.Username,
-		Password: l.Password,
+		Username: param.Username,
+		Password: param.Password,
 	}
 	user, err := u.Login()
 	if err != nil {
@@ -36,12 +45,14 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	//签发token
+	// 签发token
 	claims := request.CustomClaims{
-		UUID:       user.UUID,
-		ID:         user.ID,
-		Username:   u.Username,
-		BufferTime: global.EASConfig.JWT.BufferTime,
+		UUID:        user.UUID,
+		ID:          user.ID,
+		Username:    user.Username,
+		NickName:    user.NickName,
+		AuthorityId: user.AuthorityId,
+		BufferTime:  global.EASConfig.JWT.BufferTime,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,                             // 签名生效时间
 			ExpiresAt: time.Now().Unix() + global.EASConfig.JWT.ExpiresTime, // 过期时间 7天  配置文件
@@ -51,7 +62,7 @@ func Login(c *gin.Context) {
 	token, err := middleware.ReleaseToken(claims)
 
 	data := response.Login{
-		User:      *u,
+		User:      user,
 		Token:     token,
 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 	}

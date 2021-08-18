@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 
 	"admin/global"
 	"admin/model/request"
@@ -18,10 +19,10 @@ import (
 // JWT 检查token
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//获取Authorization Header
+		// 获取Authorization Header
 		token := c.GetHeader("token")
 
-		//判断是否有token
+		// 判断是否有token
 		if token == "" || !strings.HasPrefix(token, "Bearer ") {
 			response.ErrorResponse(c, utils.ErrTokenInvalid)
 			c.Abort()
@@ -29,7 +30,7 @@ func JWT() gin.HandlerFunc {
 		}
 
 		token = token[7:]
-		//验证token格式是否合法
+		// 验证token格式是否合法
 		claims, err := ParseToken(token)
 		if err != nil {
 			response.ErrorResponse(c, utils.ErrTokenInvalid)
@@ -37,30 +38,30 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 
-		//token格式正确
-		//验证token是否过期
+		// token格式正确
+		// 验证token是否过期
 		if claims.ExpiresAt < time.Now().Unix() {
 			response.ErrorResponse(c, utils.ErrTokenOverTime)
 			c.Abort()
 			return
 		}
 
-		//TODO 验证userId是否存在
+		// TODO 验证userId是否存在
 
-		//TODO 有效期验证
+		// TODO 有效期验证
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
 			claims.ExpiresAt = time.Now().Unix() + global.EASConfig.JWT.ExpiresTime
 			newToken, _ := UpdateToken(token, *claims)
 			newClaims, _ := ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
-			//单点登录拦截
+			// 单点登录拦截
 			if global.EASConfig.Server.UseMultipoint {
-				//TODO 单点登录逻辑
+				// TODO 单点登录逻辑
 			}
 		}
 
-		//验证通过将user的信息写入上下文
+		// 验证通过将user的信息写入上下文
 		c.Set("claims", claims)
 		c.Next()
 	}

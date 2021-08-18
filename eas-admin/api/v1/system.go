@@ -24,7 +24,9 @@ func InitMySQL(c *gin.Context) {
 
 	var param request.InitDB
 	if err := c.ShouldBind(&param); err != nil {
-		global.EASLog.Error("参数校验不通过", zap.Any("err", err))
+		global.EASLog.Error("请求缺少参数", zap.Any("err", err))
+		response.ErrorResponseCustom(c, utils.ErrCodeMissingParamError, "请求缺少参数")
+		return
 	}
 
 	if err := service.InitDB(param); err != nil {

@@ -18,27 +18,27 @@ func GetResponseMsg(code ResponseCode) (responseMsg string) {
 // HTTP状态码
 // 添加消息码之后必须在下面Map添加消息码对应的消息
 const (
-	//权限错误
+	// 权限错误
 
 	// ErrPermissionDenied 权限错误
 	ErrPermissionDenied ResponseCode = 1100 + iota
 	ErrTokenInvalid
 	ErrTokenOverTime
 
-	//参数错误
+	// 参数错误
 
 	// ErrCodeParamError 参数错误
 	ErrCodeParamError ResponseCode = 1000 + iota
 	ErrCodeMissingParamError
 
-	//处理错误
+	// 处理错误
 
 	// ErrServerError 处理错误
 	ErrServerError ResponseCode = 1200 + iota
 	ErrUserNotFound
 	ErrUserNotFoundOrErr
 
-	//数据错误
+	// 数据错误
 
 	// ErrCodeMySQLError 数据错误
 	ErrCodeMySQLError ResponseCode = 1300 + iota
