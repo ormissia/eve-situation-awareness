@@ -12,7 +12,7 @@ import (
 func Mysql() (db *gorm.DB) {
 	m := global.EASConfig.Mysql
 	if m.DBName == "" {
-		global.EASLog.Warn("Mysql connect failed: need DBName conf")
+		global.EASLog.Warn("mysql connect failed: need DBName conf")
 		return nil
 	}
 
