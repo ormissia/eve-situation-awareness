@@ -6,8 +6,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 
-	"admin/global"
-	"admin/model"
+	"eas-admin/global"
+	"eas-admin/model"
 )
 
 var User = new(user)

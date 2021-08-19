@@ -7,11 +7,11 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"admin/config"
-	"admin/global"
-	"admin/model"
-	"admin/model/request"
-	"admin/source"
+	"eas-admin/config"
+	"eas-admin/global"
+	"eas-admin/model"
+	"eas-admin/model/request"
+	"eas-admin/source"
 )
 
 func InitDB(conf request.InitDB) (err error) {

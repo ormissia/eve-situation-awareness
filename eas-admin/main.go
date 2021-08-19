@@ -1,8 +1,8 @@
 package main
 
 import (
-	"admin/global"
-	"admin/initialize"
+	"eas-admin/global"
+	"eas-admin/initialize"
 )
 
 func main() {

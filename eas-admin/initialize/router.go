@@ -3,8 +3,8 @@ package initialize
 import (
 	"github.com/gin-gonic/gin"
 
-	router "admin/api/router"
-	"admin/middleware"
+	router "eas-admin/api/router"
+	"eas-admin/middleware"
 )
 
 func Routers() (r *gin.Engine) {

@@ -4,11 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"admin/global"
-	"admin/model/request"
-	"admin/model/response"
-	"admin/service"
-	"admin/utils"
+	"eas-admin/global"
+	"eas-admin/model/request"
+	"eas-admin/model/response"
+	"eas-admin/service"
+	"eas-admin/utils"
 )
 
 func Ping(c *gin.Context) {

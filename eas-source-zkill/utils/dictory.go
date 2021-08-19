@@ -1,10 +1,11 @@
 package utils
 
 import (
-	"go.uber.org/zap"
 	"os"
 
-	"eas-admin/global"
+	"go.uber.org/zap"
+
+	"eas-source-zkill/global"
 )
 
 // PathExists 文件目录是否存在

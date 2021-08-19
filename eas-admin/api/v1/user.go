@@ -6,12 +6,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"admin/global"
-	"admin/middleware"
-	"admin/model"
-	"admin/model/request"
-	"admin/model/response"
-	"admin/utils"
+	"eas-admin/global"
+	"eas-admin/middleware"
+	"eas-admin/model"
+	"eas-admin/model/request"
+	"eas-admin/model/response"
+	"eas-admin/utils"
 )
 
 // GetUserInfo 获取任一用户的信息

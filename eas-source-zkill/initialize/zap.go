@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"eas-admin/global"
-	"eas-admin/utils"
+	"eas-source-zkill/global"
+	"eas-source-zkill/utils"
 )
 
 var level zapcore.Level

@@ -1,6 +1,6 @@
 package response
 
-import "admin/model"
+import "eas-admin/model"
 
 type Login struct {
 	User      model.User `json:"user"`

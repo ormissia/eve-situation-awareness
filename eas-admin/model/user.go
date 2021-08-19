@@ -4,7 +4,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 
-	"admin/global"
+	"eas-admin/global"
 )
 
 type User struct {

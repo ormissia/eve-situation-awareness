@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"eas-admin/global"
+	"eas-source-zkill/global"
 )
 
 func Mysql() (db *gorm.DB) {

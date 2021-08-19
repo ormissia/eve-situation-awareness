@@ -7,7 +7,7 @@ import (
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
 
-	"eas-admin/config"
+	"eas-source-zkill/config"
 )
 
 var (

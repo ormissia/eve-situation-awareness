@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"admin/utils"
+	"eas-admin/utils"
 )
 
 type response struct {

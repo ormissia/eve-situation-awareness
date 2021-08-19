@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/viper"
 	"os"
 
-	"eas-admin/global"
-	"eas-admin/utils"
+	"eas-source-zkill/global"
+	"eas-source-zkill/utils"
 )
 
 func Viper(path ...string) (v *viper.Viper) {
