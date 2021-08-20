@@ -8,8 +8,8 @@ import (
 
 	"eas-go-service/eas-admin/middleware"
 	"eas-go-service/eas-admin/model"
-	request2 "eas-go-service/eas-admin/model/request"
-	response2 "eas-go-service/eas-admin/model/response"
+	"eas-go-service/eas-admin/model/request"
+	"eas-go-service/eas-admin/model/response"
 	"eas-go-service/global"
 	"eas-go-service/utils"
 )
@@ -20,18 +20,18 @@ func GetUserInfo(c *gin.Context) {
 
 	user, err := new(model.User).SelectUserByUUID(uuid)
 	if err != nil {
-		response2.ErrorResponseCustom(c, utils.ErrCodeParamError, "未找到用户")
+		response.ErrorResponseCustom(c, utils.ErrCodeParamError, "未找到用户")
 		return
 	}
 
-	response2.SuccessResponse(c, user)
+	response.SuccessResponse(c, user)
 }
 
 func Login(c *gin.Context) {
-	var param = request2.Login{}
+	var param = request.Login{}
 	err := c.ShouldBind(&param)
 	if err != nil {
-		response2.ErrorResponse(c, utils.ErrCodeMissingParamError)
+		response.ErrorResponse(c, utils.ErrCodeMissingParamError)
 		return
 	}
 	// TODO 验证
@@ -41,12 +41,12 @@ func Login(c *gin.Context) {
 	}
 	user, err := u.Login()
 	if err != nil {
-		response2.ErrorResponse(c, utils.ErrUserNotFoundOrErr)
+		response.ErrorResponse(c, utils.ErrUserNotFoundOrErr)
 		return
 	}
 
 	// 签发token
-	claims := request2.CustomClaims{
+	claims := request.CustomClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
 		Username:    user.Username,
@@ -61,11 +61,11 @@ func Login(c *gin.Context) {
 	}
 	token, err := middleware.ReleaseToken(claims)
 
-	data := response2.Login{
+	data := response.Login{
 		User:      user,
 		Token:     token,
 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 	}
 
-	response2.SuccessResponse(c, data)
+	response.SuccessResponse(c, data)
 }

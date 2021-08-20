@@ -42,7 +42,7 @@ func (u *User) SelectUserByUUID(uuid string) (user User, err error) {
 	db := global.EASMySql.Model(u)
 
 	db = db.Where("uuid = ?", uuid)
-	err = db.First(&user).Error
+	err = db.Find(&user).Error
 
 	return
 }
