@@ -13,11 +13,9 @@ WORKDIR /src
 
 # 复制项目并下载依赖信息
 ADD ./ /src
-RUN go mod download
 
 # 将代码编译成二进制可执行文件app
-RUN go build -o /eas-admin eas-admin/main.go
-RUN go build -o /eas-source-zkill eas-source-zkill/main.go
+RUN make
 
 ###################
 # 接下来创建一个小镜像
@@ -25,7 +23,7 @@ RUN go build -o /eas-source-zkill eas-source-zkill/main.go
 FROM scratch AS eas-admin
 
 # 从builder镜像中把程序拷贝到当前目录
-COPY --from=builder eas-admin /
+COPY --from=builder /src/target/eas-admin /
 
 # 声明服务端口
 EXPOSE 8080
@@ -36,7 +34,7 @@ ENTRYPOINT ["/eas-admin"]
 FROM scratch AS eas-source-zkill
 
 # 从builder镜像中把程序拷贝到当前目录
-COPY --from=builder eas-source-zkill /
+COPY --from=builder /src/target/eas-source-zkill /
 
 # 声明服务端口
 EXPOSE 8080

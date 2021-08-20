@@ -9,22 +9,25 @@ init:
 build: eas-admin-service eas-source-zkill-service
 
 #TODO
-#-------------------
-docker: docker-build docker-push
+#-----------------------------------------------------------------------------------------------
+docker: docker-build docker-push docker-clean
 
-docker-build: docker-build-eas-admin docker-build-eas-source-zkill
+docker-build: eas-admin-docker eas-source-zkill-docker
 
 docker-push:
 
-#-------------------
-eas-admin-service:
-	GOOS=linux GOARCH=amd64 go build -o target/eas-admin eas-admin/main.go
+docker-clean:
 
-docker-build-eas-admin:
+#-----------------------------------------------------------------------------------------------
+eas-admin-service:
+	go build -o target/eas-admin eas-admin/main.go
+
+eas-admin-docker:
 	docker build -t ormissia/eas-admin --target eas-admin .
 
+#-----------------------------------------------------------------------------------------------
 eas-source-zkill-service:
-	GOOS=linux GOARCH=amd64 go build -o target/eas-source-zkill eas-source-zkill/main.go
+	go build -o target/eas-source-zkill eas-source-zkill/main.go
 
-docker-build-eas-source-zkill:
+eas-source-zkill-docker:
 	docker build -t ormissia/eas-source-zkill --target eas-source-zkill .
