@@ -50,8 +50,8 @@ func Login(c *gin.Context) {
 		UUID:        user.UUID,
 		ID:          user.ID,
 		Username:    user.Username,
-		NickName:    user.NickName,
-		AuthorityId: user.AuthorityId,
+		NickName:    user.Nickname,
+		AuthorityId: user.RoleId,
 		BufferTime:  global.EASConfig.JWT.BufferTime,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,                             // 签名生效时间

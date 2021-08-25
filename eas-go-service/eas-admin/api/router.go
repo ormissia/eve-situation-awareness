@@ -21,6 +21,7 @@ func Routers() (r *gin.Engine) {
 	privateGroup := baseGroup.Group("")
 	privateGroup.Use(middleware.JWT()).Use(middleware.Casbin())
 	{
+		routers.InitRoleRouter(privateGroup)
 		routers.InitUserRouter(privateGroup)
 	}
 

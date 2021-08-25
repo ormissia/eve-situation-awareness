@@ -25,9 +25,11 @@ var casbins = []gormadapter.CasbinRule{
 	// 角色分组
 	{Ptype: "g", V0: "2115581995", V1: "user_admin_group"},
 	// 资源分组
-	{Ptype: "g2", V0: "/admin/user/info", V1: "user_get_request"},
+	{Ptype: "g2", V0: "/admin/user/info", V1: "request_get_admin_group"},
+	{Ptype: "g2", V0: "/admin/role", V1: "request_post_admin_group"},
 	// 组-资源 操作权限
-	{Ptype: "p", V0: "user_admin_group", V1: "user_get_request", V2: "GET"},
+	{Ptype: "p", V0: "user_admin_group", V1: "request_get_admin_group", V2: "GET"},
+	{Ptype: "p", V0: "user_admin_group", V1: "request_post_admin_group", V2: "POST"},
 }
 
 func (a *casbin) Init() error {

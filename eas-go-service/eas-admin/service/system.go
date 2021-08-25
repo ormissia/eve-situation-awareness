@@ -53,6 +53,7 @@ func InitDB(conf request.InitDB) (err error) {
 
 	// 初始化表结构
 	if err = global.EASMySql.AutoMigrate(
+		model.Role{},
 		model.User{},
 	); err != nil {
 		global.EASMySql = nil
@@ -61,7 +62,9 @@ func InitDB(conf request.InitDB) (err error) {
 
 	// 初始化表数据
 	if err = initData(
+		source.Role,
 		source.User,
+		source.UserRole,
 		source.Casbin,
 	); err != nil {
 		global.EASMySql = nil
