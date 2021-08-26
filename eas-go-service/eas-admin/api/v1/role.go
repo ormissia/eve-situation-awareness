@@ -25,12 +25,12 @@ func CreateRole(c *gin.Context) {
 	param.UpdateTime = now
 	if param.ParentRoleId != 0 {
 		// 判断该ID是否存在
-		roles, err := param.Select([]uint{param.ParentRoleId}, "", 0)
+		total, _, err := param.Select([]uint{param.ParentRoleId}, "", 0, 0, 0)
 		if err != nil {
 			response.ErrorResponseCustom(c, utils.ErrCodeMySQLError, err.Error())
 			return
 		}
-		if len(roles) != 1 {
+		if total != 1 {
 			response.ErrorResponseCustom(c, utils.ErrCodeParamError, "不存在该ID的父角色")
 			return
 		}
@@ -48,6 +48,15 @@ func SearchRole(c *gin.Context) {
 	idsStr := c.Query("ids")
 	rolename := c.Query("rolename")
 	parentRoleIdStr := c.Query("parentRoleId")
+
+	pageNoStr := c.Query("pageNo")
+	pageSizeStr := c.Query("pageSize")
+	pageNo, pageSize, err := utils.PagingParam(pageNoStr, pageSizeStr)
+	if err != nil {
+		global.EASLog.Error("pageNo or pageSize invalid", zap.Any("err", err))
+		response.ErrorResponseCustom(c, utils.ErrCodeParamError, "分页参数错误")
+		return
+	}
 
 	idStrs := make([]string, 0)
 	if idsStr != "" {
@@ -73,14 +82,17 @@ func SearchRole(c *gin.Context) {
 		}
 		parentRoleId = parentRoleIdTemp
 	}
-	roles, err := new(model.Role).Select(ids, rolename, uint(parentRoleId))
+	total, roles, err := new(model.Role).Select(ids, rolename, uint(parentRoleId), pageNo, pageSize)
 	if err != nil {
 		global.EASLog.Error("role search failed", zap.Any("err", err))
 		response.ErrorResponseCustom(c, utils.ErrCodeMySQLError, "数据库错误")
 		return
 	}
 
-	response.SuccessResponse(c, roles)
+	response.SuccessResponse(c, response.PageResult{
+		Total: total,
+		List:  roles,
+	})
 }
 
 // UpdateRole 创建角色

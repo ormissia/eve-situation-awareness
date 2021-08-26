@@ -19,7 +19,7 @@ func (Role) TableName() string {
 	return "role"
 }
 
-func (r *Role) Select(ids []uint, rolename string, parentRoleId uint) (result []Role, err error) {
+func (r *Role) Select(ids []uint, rolename string, parentRoleId uint, pageNo, pageSize int) (total int64, result []Role, err error) {
 	db := global.EASMySql.Model(r)
 
 	if len(ids) > 0 {
@@ -30,6 +30,13 @@ func (r *Role) Select(ids []uint, rolename string, parentRoleId uint) (result []
 	}
 	db = db.Where("parent_role_id = ?", parentRoleId)
 
+	db.Count(&total)
+
+	db = db.Order("id")
+
+	if pageNo != 0 && pageSize != 0 {
+		db = db.Limit(pageSize).Offset((pageNo - 1) * pageSize)
+	}
 	err = db.Find(&result).Error
 	return
 }

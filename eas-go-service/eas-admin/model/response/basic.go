@@ -63,8 +63,6 @@ func ErrorResponseCustom(c *gin.Context, errCode utils.ResponseCode, msg string)
 }
 
 type PageResult struct {
-	Total    int64       `json:"total"`
-	PageNum  int         `json:"pageNum"`
-	PageSize int         `json:"pageSize"`
-	List     interface{} `json:"list"`
+	Total int64       `json:"total"`
+	List  interface{} `json:"list"`
 }
