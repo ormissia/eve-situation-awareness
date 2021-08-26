@@ -19,7 +19,7 @@ func (Role) TableName() string {
 	return "role"
 }
 
-func (r *Role) Select(ids []uint, rolename string) (result []Role, err error) {
+func (r *Role) Select(ids []uint, rolename string, parentRoleId uint) (result []Role, err error) {
 	db := global.EASMySql.Model(r)
 
 	if len(ids) > 0 {
@@ -28,6 +28,7 @@ func (r *Role) Select(ids []uint, rolename string) (result []Role, err error) {
 	if rolename != "" {
 		db = db.Where("rolename like ?", fmt.Sprintf("%%%s%%", rolename))
 	}
+	db = db.Where("parent_role_id = ?", parentRoleId)
 
 	err = db.Find(&result).Error
 	return
@@ -37,5 +38,17 @@ func (r *Role) Creat() (err error) {
 	db := global.EASMySql.Model(r)
 
 	err = db.Create(r).Error
+	return
+}
+
+func (r *Role) Update() (err error) {
+	db := global.EASMySql.Model(r)
+
+	db = db.Where("id = ?", r.ID)
+	err = db.Updates(map[string]interface{}{
+		"rolename":       r.Rolename,
+		"parent_role_id": r.ParentRoleId,
+		"update_time":    r.UpdateTime,
+	}).Error
 	return
 }

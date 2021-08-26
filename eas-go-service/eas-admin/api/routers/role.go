@@ -9,6 +9,8 @@ import (
 func InitRoleRouter(r *gin.RouterGroup) {
 	systemGroup := r.Group("/role")
 	{
-		systemGroup.POST("", v1.CreateRule)
+		systemGroup.POST("", v1.CreateRole)
+		systemGroup.GET("", v1.SearchRole)
+		systemGroup.PUT("", v1.UpdateRole)
 	}
 }
