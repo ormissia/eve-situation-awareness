@@ -43,7 +43,8 @@ func (client *Client) Connect() {
 			global.EASLog.Info("WebSocket write message:", zap.String("message", writeMsg))
 			if err := c.WriteMessage(websocket.TextMessage, []byte(writeMsg)); err != nil {
 				global.EASLog.Error("WebSocket write message err:", zap.Any("err", err))
-				return
+				// TODO 消息发送失败，可能是网络波动或是其他情况，需要进行处理
+				continue
 			}
 		}
 	}()
@@ -53,7 +54,8 @@ func (client *Client) Connect() {
 		mt, message, err := c.ReadMessage()
 		if err != nil {
 			global.EASLog.Error("WebSocket read message err:", zap.Any("err", err))
-			return
+			// TODO 消息接收失败，可能是网络波动或是其他情况，需要进行处理
+			continue
 		}
 		global.EASLog.Info("WebSocket read message:", zap.Int("mt", mt), zap.ByteString("message", message))
 		client.Read <- message
