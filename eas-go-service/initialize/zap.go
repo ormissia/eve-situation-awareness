@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
@@ -51,7 +52,7 @@ func Zap() (logger *zap.Logger) {
 	return
 }
 
-// 自定义日志输出时间格式
+// CustomTimeEncoder 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format(global.EASConfig.Zap.Prefix + global.EASConfig.Server.TimeFormat))
 }
@@ -96,5 +97,15 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 
 // getEncoderCore 获取Encoder的zapcore.Core
 func getEncoderCore() (core zapcore.Core) {
-	return zapcore.NewCore(getEncoder(), os.Stdout, level)
+	logFileName := global.EASConfig.Zap.Director + global.EASConfig.Server.ServiceName + ".log"
+	hook := lumberjack.Logger{
+		Filename:   logFileName, // 日志文件路径
+		MaxSize:    512,         // 每个日志文件保存的最大尺寸 单位：M
+		MaxBackups: 30,          // 日志文件最多保存多少个备份
+		MaxAge:     30,          // 文件最多保存多少天
+		Compress:   true,        // 是否压缩
+	}
+	return zapcore.NewCore(getEncoder(),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook)),
+		level)
 }

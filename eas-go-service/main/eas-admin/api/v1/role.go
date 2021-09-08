@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"eas-go-service/eas-admin/model"
-	"eas-go-service/eas-admin/model/response"
 	"eas-go-service/global"
+	"eas-go-service/main/eas-admin/model"
+	"eas-go-service/main/eas-admin/model/response"
 	"eas-go-service/utils"
 )
 

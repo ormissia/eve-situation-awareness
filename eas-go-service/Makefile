@@ -1,3 +1,5 @@
+SERVICE_NAME = N
+
 all: clean init build
 
 clean:
@@ -6,9 +8,9 @@ clean:
 init:
 	mkdir -p "target"
 
-build: eas-admin-service eas-source-zkill-service
+build:
+	sh build.sh $(sname)
 
-#TODO
 #-----------------------------------------------------------------------------------------------
 docker: docker-build docker-push docker-clean
 
@@ -18,16 +20,9 @@ docker-push:
 
 docker-clean:
 
-#-----------------------------------------------------------------------------------------------
-eas-admin-service:
-	go build -o target/eas-admin eas-admin/main.go
-
 eas-admin-docker:
 	docker build -t ormissia/eas-admin --target eas-admin .
 
 #-----------------------------------------------------------------------------------------------
-eas-source-zkill-service:
-	go build -o target/eas-source-zkill eas-source-zkill/main.go
-
 eas-source-zkill-docker:
 	docker build -t ormissia/eas-source-zkill --target eas-source-zkill .

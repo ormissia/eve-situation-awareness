@@ -8,10 +8,10 @@ import (
 	"gorm.io/gorm"
 
 	"eas-go-service/config"
-	"eas-go-service/eas-admin/model"
-	"eas-go-service/eas-admin/model/request"
-	"eas-go-service/eas-admin/source"
 	"eas-go-service/global"
+	model2 "eas-go-service/main/eas-admin/model"
+	"eas-go-service/main/eas-admin/model/request"
+	source2 "eas-go-service/main/eas-admin/source"
 )
 
 func InitDB(conf request.InitDB) (err error) {
@@ -53,8 +53,8 @@ func InitDB(conf request.InitDB) (err error) {
 
 	// 初始化表结构
 	if err = global.EASMySql.AutoMigrate(
-		model.Role{},
-		model.User{},
+		model2.Role{},
+		model2.User{},
 	); err != nil {
 		global.EASMySql = nil
 		return err
@@ -62,10 +62,10 @@ func InitDB(conf request.InitDB) (err error) {
 
 	// 初始化表数据
 	if err = initData(
-		source.Role,
-		source.User,
-		source.UserRole,
-		source.Casbin,
+		source2.Role,
+		source2.User,
+		source2.UserRole,
+		source2.Casbin,
 	); err != nil {
 		global.EASMySql = nil
 		return err

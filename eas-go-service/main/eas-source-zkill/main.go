@@ -4,9 +4,9 @@ import (
 	"embed"
 	"fmt"
 
-	"eas-go-service/eas-source-zkill/core"
 	"eas-go-service/global"
 	"eas-go-service/initialize"
+	"eas-go-service/main/eas-source-zkill/core"
 )
 
 //go:embed config.yaml

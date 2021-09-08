@@ -3,7 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
-	"eas-go-service/eas-admin/api/v1"
+	"eas-go-service/main/eas-admin/api/v1"
 )
 
 func InitUserBaseRouter(Router *gin.RouterGroup) {

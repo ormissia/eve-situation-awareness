@@ -3,9 +3,9 @@ package main
 import (
 	"embed"
 
-	"eas-go-service/eas-admin/api"
 	"eas-go-service/global"
 	"eas-go-service/initialize"
+	"eas-go-service/main/eas-admin/api"
 )
 
 //go:embed config.yaml
@@ -30,7 +30,9 @@ func main() {
 	if global.EASMySql != nil {
 		// 程序结束前关闭数据库链接
 		db, _ := global.EASMySql.DB()
-		defer db.Close()
+		defer func() {
+			_ = db.Close()
+		}()
 	}
 	err := r.Run(":8080")
 	if err != nil {

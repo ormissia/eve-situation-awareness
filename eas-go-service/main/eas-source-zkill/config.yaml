@@ -1,7 +1,8 @@
-# ESA-Admin Global Configuration
+# ESA-Source-ZKill Global Configuration
 
 # server configuration
 server:
+  service-name: eas-admin
   port: 8090
   time-format: 2006-01-02 15:04:05.000
 
@@ -9,8 +10,8 @@ server:
 zap:
   level: 'info'
   format: 'console'
-  prefix: '[EAS-ADMIN]'
-  director: 'log'
+  prefix: '[EAS-SOURCE-ZKILL]'
+  director: './log/'
   link-name: 'latest_log'
   show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
@@ -19,8 +20,8 @@ zap:
 
 # mysql configuration
 mysql:
-  path: 127.0.0.1:3306
-  dbname: esa_admin
+  path:
+  dbname:
   username: root
   password: 123
   config: charset=utf8&parseTime=True&loc=Local
@@ -30,13 +31,3 @@ mysql:
 # mysql configuration
 redis:
   path:
-
-# casbin configuration
-casbin:
-  model-path: rbac_model.conf
-
-# jwt configuration
-jwt:
-  signing-key: 'qmPlus'
-  expires-time: 604800
-  buffer-time: 86400

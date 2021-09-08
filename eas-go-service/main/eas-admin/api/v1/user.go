@@ -6,11 +6,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
-	"eas-go-service/eas-admin/middleware"
-	"eas-go-service/eas-admin/model"
-	"eas-go-service/eas-admin/model/request"
-	"eas-go-service/eas-admin/model/response"
 	"eas-go-service/global"
+	"eas-go-service/main/eas-admin/middleware"
+	"eas-go-service/main/eas-admin/model"
+	request2 "eas-go-service/main/eas-admin/model/request"
+	response2 "eas-go-service/main/eas-admin/model/response"
 	"eas-go-service/utils"
 )
 
@@ -20,18 +20,18 @@ func GetUserInfo(c *gin.Context) {
 
 	user, err := new(model.User).SelectUserByUUID(uuid)
 	if err != nil {
-		response.ErrorResponseCustom(c, utils.ErrCodeParamError, "未找到用户")
+		response2.ErrorResponseCustom(c, utils.ErrCodeParamError, "未找到用户")
 		return
 	}
 
-	response.SuccessResponse(c, user)
+	response2.SuccessResponse(c, user)
 }
 
 func Login(c *gin.Context) {
-	var param = request.Login{}
+	var param = request2.Login{}
 	err := c.ShouldBind(&param)
 	if err != nil {
-		response.ErrorResponse(c, utils.ErrCodeMissingParamError)
+		response2.ErrorResponse(c, utils.ErrCodeMissingParamError)
 		return
 	}
 	// TODO 验证
@@ -41,12 +41,12 @@ func Login(c *gin.Context) {
 	}
 	user, err := u.Login()
 	if err != nil {
-		response.ErrorResponse(c, utils.ErrUserNotFoundOrErr)
+		response2.ErrorResponse(c, utils.ErrUserNotFoundOrErr)
 		return
 	}
 
 	// 签发token
-	claims := request.CustomClaims{
+	claims := request2.CustomClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
 		Username:    user.Username,
@@ -61,11 +61,11 @@ func Login(c *gin.Context) {
 	}
 	token, err := middleware.ReleaseToken(claims)
 
-	data := response.Login{
+	data := response2.Login{
 		User:      user,
 		Token:     token,
 		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 	}
 
-	response.SuccessResponse(c, data)
+	response2.SuccessResponse(c, data)
 }
