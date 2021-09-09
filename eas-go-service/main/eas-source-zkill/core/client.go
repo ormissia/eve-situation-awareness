@@ -1,7 +1,6 @@
 package core
 
 import (
-	"log"
 	"net/url"
 
 	"github.com/gorilla/websocket"
@@ -29,7 +28,7 @@ func (client *Client) Connect() {
 	// 建立连接
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		log.Fatal("dial:", err)
+		panic(err)
 	}
 	defer func() {
 		_ = c.Close()
@@ -53,9 +52,9 @@ func (client *Client) Connect() {
 	for {
 		mt, message, err := c.ReadMessage()
 		if err != nil {
+			// 消息接收失败，可能是网络波动或是其他情况，需要进行处理
 			global.EASLog.Error("WebSocket read message err:", zap.Any("err", err))
-			// TODO 消息接收失败，可能是网络波动或是其他情况，需要进行处理
-			continue
+			panic(err)
 		}
 		global.EASLog.Info("WebSocket read message:", zap.Int("mt", mt), zap.ByteString("message", message))
 		client.Read <- message

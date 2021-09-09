@@ -2,7 +2,7 @@
 
 # server configuration
 server:
-  service-name: eas-admin
+  service-name: eas-source-zkill
   port: 8090
   time-format: 2006-01-02 15:04:05.000
 
