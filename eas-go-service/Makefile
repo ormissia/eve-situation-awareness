@@ -1,4 +1,5 @@
-SERVICE_NAME = N
+# eg. 编译所有服务：make
+# eg. 编译某个服务：make eas-admin
 
 all: clean init build
 
@@ -9,20 +10,16 @@ init:
 	mkdir -p "target"
 
 build:
-	sh build.sh $(sname)
+	sh build.sh binary $(service)
 
 #-----------------------------------------------------------------------------------------------
 docker: docker-build docker-push docker-clean
 
-docker-build: eas-admin-docker eas-source-zkill-docker
+docker-build:
+	sh build.sh docker-build $(service)
 
 docker-push:
+	sh build.sh docker-push $(service)
 
 docker-clean:
-
-eas-admin-docker:
-	docker build -t ormissia/eas-admin --target eas-admin .
-
-#-----------------------------------------------------------------------------------------------
-eas-source-zkill-docker:
-	docker build -t ormissia/eas-source-zkill --target eas-source-zkill .
+	sh build.sh docker-clean $(service)
