@@ -18,7 +18,7 @@ function Build {
   else
     echo "incorrect compile type $1"
     exit
-    fi
+  fi
 # 判断编译是否成功
   if [ $? -eq 0 ];then
     echo build "$1" successful

@@ -26,7 +26,13 @@ var u = url.URL{Scheme: "wss", Host: "zkillboard.com", Path: "/websocket/"}
 
 func (client *Client) Connect() {
 	// 建立连接
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	// TODO 完善header
+	header := map[string][]string{
+		"user":    {"1", "2"},
+		"email":   {"1"},
+		"project": {""},
+	}
+	c, _, err := websocket.DefaultDialer.Dial(u.String(), header)
 	if err != nil {
 		panic(err)
 	}
