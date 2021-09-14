@@ -4,6 +4,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 
 	"eas-go-service/global"
+	"eas-go-service/main/eas-admin/service"
 )
 
 // User 用户相关
@@ -37,5 +38,13 @@ func (u *User) SelectUserByUUID(uuid string) (user User, err error) {
 	db = db.Where("uuid = ?", uuid)
 	err = db.Preload("Roles").Find(&user).Error
 
+	return
+}
+
+func (u *User) UpdateCasbin() (err error) {
+	// TODO
+	rules := make([][]string, 0)
+	e := service.InitCasbinEnforcer()
+	_, err = e.AddPolicies(rules)
 	return
 }

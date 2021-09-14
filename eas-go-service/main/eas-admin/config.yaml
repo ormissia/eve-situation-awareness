@@ -28,7 +28,7 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 100
 
-# mysql configuration
+# redis configuration
 redis:
   path:
 
