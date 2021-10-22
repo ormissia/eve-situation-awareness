@@ -14,11 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: test
-      run: chmod u+x ./eas-go-service/build.sh
-
     - name: Build
-      run: sudo ./eas-go-service/build.sh binary
+      run: make
       shell: bash
 
     - name: test

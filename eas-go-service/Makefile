@@ -10,7 +10,7 @@ init:
 	mkdir -p "target"
 
 build:
-	sh build.sh binary $(service)
+	bash build.sh binary $(service)
 
 #-----------------------------------------------------------------------------------------------
 docker: docker-build docker-push docker-clean
