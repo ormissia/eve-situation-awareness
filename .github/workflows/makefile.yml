@@ -15,10 +15,10 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: test
-      run: ls
+      run: ls -l ./eas-go-service
 
     - name: Install dependencies
-      run: ./eas-go-service/build.sh binary
+      run: sudo ./eas-go-service/build.sh binary
       shell: bash
 
     - name: test
