@@ -13,17 +13,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: cd eas-go-service
-      run: cd eas-go-service
-      shell: bash
       
     - name: test
       run: ls
       
     - name: Install dependencies
-      run: make
-      shell: bash
+      working-directory: ./eas-go-service
+      run: |
+        pwd
+        ls
+        make
       
     - name: test
       run: ls
