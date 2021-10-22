@@ -12,7 +12,6 @@ import (
 	"eas-go-service/utils"
 )
 
-
 // Casbin 鉴权
 func Casbin() gin.HandlerFunc {
 	return func(c *gin.Context) {
