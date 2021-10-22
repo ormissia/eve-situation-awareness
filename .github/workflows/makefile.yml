@@ -15,6 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build
+      working-directory: ./eas-go-service
       run: make
       shell: bash
 
