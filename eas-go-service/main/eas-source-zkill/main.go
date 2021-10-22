@@ -2,13 +2,16 @@ package main
 
 import (
 	"embed"
-	"time"
+	"log"
+	"os"
+	"strings"
 
 	"go.uber.org/zap"
 
 	"eas-go-service/global"
 	"eas-go-service/initialize"
 	"eas-go-service/main/eas-source-zkill/core"
+	"eas-go-service/utils"
 )
 
 //go:embed config.yaml
@@ -16,43 +19,58 @@ var staticFile embed.FS
 
 const (
 	configFileName = "config.yaml"
+
+	clientName = utils.SystemName
+
+	// Client Type
+
+	redisQ    = "RedisQ"
+	webSocket = "WebSocket"
 )
 
 func init() {
 	global.EASStaticFile = staticFile
 }
 
+var client core.Source
+
+// os.Args
 func main() {
 	global.EASViper = initialize.Viper(configFileName)
 	global.EASLog = initialize.Zap()
 	// global.EASMySql = initialize.Mysql()
 	// global.EASRedis = initialize.Redis()
 
-	run()
-}
-
-func run() {
-	zKillClient := core.NewClient(1000)
-
-	if zKillClient != nil {
-		go func() {
-			defer func() {
-				if err := recover(); err != nil {
-					// 处理panic
-					global.EASLog.Error("WebSocket panic", zap.Any("message", err))
-					// 出现错误后5S进行重连
-					time.Sleep(time.Second * 5)
-					run()
-				}
-			}()
-			zKillClient.Connect()
-		}()
-
-		zKillClient.Write <- `{"action":"sub","channel":"killstream"}`
-
-		for msgByte := range zKillClient.Read {
-			// TODO 收到数据了，写到Kafka里
-			global.EASLog.Info("收到了：", zap.String("message", string(msgByte)))
+	if len(os.Args) == 1 {
+		log.Print("Default Select RedisQ Client")
+		client = core.NewRedisQClient(clientName)
+	} else {
+		clientType := os.Args[1]
+		if strings.EqualFold(clientType, redisQ) {
+			log.Print("Select RedisQ Client")
+			client = core.NewRedisQClient(clientName)
+		} else if strings.EqualFold(clientType, webSocket) {
+			client = core.NewWebSocketClient(clientName)
+			log.Print("Select WebSocket Client")
 		}
 	}
+
+	run(client)
+}
+
+func run(client core.Source) {
+	defer func() {
+		if err := recover(); err != nil {
+			global.EASLog.Error("Client error", zap.Any("err", err))
+		}
+	}()
+
+	client.Listening(listeningFunc)
+}
+
+var listeningFunc = func(msg string) {
+	// TODO 将msg发送到Kafka
+	go func(msg string) {
+		global.EASLog.Info("Kafka receive msg", zap.String("msg", msg))
+	}(msg)
 }

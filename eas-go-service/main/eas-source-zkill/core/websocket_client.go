@@ -2,6 +2,7 @@ package core
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
@@ -9,22 +10,22 @@ import (
 	"eas-go-service/global"
 )
 
-func NewClient(readBufferSize int) *Client {
-	return &Client{
-		Read:  make(chan []byte, readBufferSize),
-		Write: make(chan string),
-	}
-}
-
-type Client struct {
-	Read  chan []byte
-	Write chan string
-}
-
 // Path必须以"/"斜杠结尾
 var u = url.URL{Scheme: "wss", Host: "zkillboard.com", Path: "/websocket/"}
 
-func (client *Client) Connect() {
+type webSocketClient struct {
+	clientName string
+	Write      chan string
+}
+
+func NewWebSocketClient(clientName string) (c *webSocketClient) {
+	c = new(webSocketClient)
+	c.clientName = clientName
+	c.Write = make(chan string)
+	return
+}
+
+func (c *webSocketClient) Listening(outPut func(msg string)) {
 	// 建立连接
 	// TODO 完善header
 	header := map[string][]string{
@@ -32,37 +33,40 @@ func (client *Client) Connect() {
 		"email":   {"1"},
 		"project": {""},
 	}
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), header)
+	client, _, err := websocket.DefaultDialer.Dial(u.String(), header)
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		_ = c.Close()
-		close(client.Write)
-		close(client.Read)
+		_ = client.Close()
 	}()
 
 	// 发送消息
 	go func() {
-		for writeMsg := range client.Write {
+		for writeMsg := range c.Write {
 			global.EASLog.Info("WebSocket write message:", zap.String("message", writeMsg))
-			if err := c.WriteMessage(websocket.TextMessage, []byte(writeMsg)); err != nil {
+			if err := client.WriteMessage(websocket.TextMessage, []byte(writeMsg)); err != nil {
 				global.EASLog.Error("WebSocket write message err:", zap.Any("err", err))
 				// TODO 消息发送失败，可能是网络波动或是其他情况，需要进行处理
+				time.Sleep(time.Second * 5)
+				c.Write <- `{"action":"sub","channel":"killstream"}`
 				continue
 			}
 		}
 	}()
 
+	// TODO
+	c.Write <- `{"action":"sub","channel":"killstream"}`
+
 	// 监听消息
 	for {
-		mt, message, err := c.ReadMessage()
+		mt, message, err := client.ReadMessage()
 		if err != nil {
 			// 消息接收失败，可能是网络波动或是其他情况，需要进行处理
 			global.EASLog.Error("WebSocket read message err:", zap.Any("err", err))
 			panic(err)
 		}
 		global.EASLog.Info("WebSocket read message:", zap.Int("mt", mt), zap.ByteString("message", message))
-		client.Read <- message
+		outPut(string(message))
 	}
 }

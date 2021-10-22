@@ -18,6 +18,8 @@ var (
 	EASLog    *zap.Logger
 	EASMySql  *gorm.DB
 	EASRedis  *redis.Client
+	// TODO
+	EASKafka string
 
 	EASStaticFile embed.FS
 

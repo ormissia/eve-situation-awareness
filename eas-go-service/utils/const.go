@@ -1,3 +1,5 @@
 package utils
 
-const ()
+const (
+	SystemName = "eve-analysis-system"
+)
