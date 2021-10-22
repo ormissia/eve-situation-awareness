@@ -21,7 +21,7 @@ jobs:
       run: ls
       
     - name: Install dependencies
-      run: make -C eas-go-service
+      run: make
       
     - name: test
       run: ls
