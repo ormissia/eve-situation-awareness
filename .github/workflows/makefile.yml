@@ -16,12 +16,14 @@ jobs:
 
     - name: cd eas-go-service
       run: cd eas-go-service
+      shell: bash
       
     - name: test
       run: ls
       
     - name: Install dependencies
       run: make
+      shell: bash
       
     - name: test
       run: ls
