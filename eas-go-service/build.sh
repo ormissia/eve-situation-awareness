@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # 代码中服务目录在项目跟目录中的文件夹名称
 SERVICE_DIR_NAME="main"
