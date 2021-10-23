@@ -1,4 +1,4 @@
-name: Makefile CI
+name: Go Services Makefile CI
 
 on:
   push:
@@ -8,12 +8,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
@@ -21,8 +20,6 @@ jobs:
 
     - name: Build
       working-directory: ./eas-go-service
-      run: make
+      run: make docker
       shell: bash
 
-    - name: test
-      run: ls
