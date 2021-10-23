@@ -16,10 +16,10 @@ build:
 docker: docker-build docker-push docker-clean
 
 docker-build:
-	sh build.sh docker-build $(service)
+	bash build.sh docker-build $(service)
 
 docker-push:
-	sh build.sh docker-push $(service)
+	bash build.sh docker-push $(service)
 
 docker-clean:
-	sh build.sh docker-clean $(service)
+	bash build.sh docker-clean $(service)
