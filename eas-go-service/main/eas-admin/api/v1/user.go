@@ -3,8 +3,8 @@ package v1
 import (
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 
 	"eas-go-service/global"
 	"eas-go-service/main/eas-admin/middleware"

@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -13,4 +13,5 @@ type CustomClaims struct {
 	AuthorityId string
 	BufferTime  int64
 	jwt.StandardClaims
+	ExpiresAt int64
 }
