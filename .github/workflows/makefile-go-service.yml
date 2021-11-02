@@ -28,8 +28,3 @@ jobs:
       working-directory: ./eas-go-service
       run: make docker
       shell: bash
-
-    - name: Push
-      working-directory: ./eas-go-service
-      run: make docker
-      shell: bash
