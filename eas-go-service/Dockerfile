@@ -7,7 +7,7 @@ ARG SERVICE_NAME
 # 为镜像设置必要的环境变量
 ENV GO111MODULE=on \
     GOOS=linux \
-    GOARCH=amd64 \
+    GOARCH=arm \
     GOPROXY=https://goproxy.cn,direct
 
 # 设置工作目录：/src
@@ -22,7 +22,7 @@ RUN cd main && go build -o /src/target/$SERVICE_NAME $SERVICE_NAME/main.go
 ###################
 # 接下来创建一个小镜像
 ###################
-FROM scratch
+FROM alpine
 ARG SERVICE_NAME
 
 # 从builder镜像中把程序拷贝到当前目录
