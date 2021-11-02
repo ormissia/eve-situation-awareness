@@ -12,7 +12,7 @@ function Build {
   elif [ "$2" == "docker-build" ]; then
     docker build -t ormissia/"$1" --build-arg SERVICE_NAME="$1" --progress=plain .
   elif [ "$2" == "docker-push" ]; then
-    echo docker-push
+    docker push ormissia/"$1"
   elif [ "$2" == "docker-clean" ]; then
     echo docker-clean
   else
