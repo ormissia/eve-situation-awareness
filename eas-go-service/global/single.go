@@ -20,6 +20,8 @@ var (
 	EASRedis  *redis.Client
 	// TODO
 	EASKafka string
+	// TODO
+	EASElasticSearch string
 
 	EASStaticFile embed.FS
 

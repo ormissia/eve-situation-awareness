@@ -32,4 +32,4 @@ COPY --from=builder /src/target/$SERVICE_NAME /main
 EXPOSE 8080
 
 # 启动容器时运行的命令
-ENTRYPOINT ["/main"]
+ENTRYPOINT "/main" $0 $@

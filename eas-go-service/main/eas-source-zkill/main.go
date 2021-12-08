@@ -11,6 +11,7 @@ import (
 	"eas-go-service/global"
 	"eas-go-service/initialize"
 	"eas-go-service/main/eas-source-zkill/core"
+	"eas-go-service/main/eas-source-zkill/storage"
 	"eas-go-service/utils"
 )
 
@@ -23,7 +24,6 @@ const (
 	clientName = utils.SystemName
 
 	// Client Type
-
 	redisQ    = "RedisQ"
 	webSocket = "WebSocket"
 )
@@ -32,7 +32,10 @@ func init() {
 	global.EASStaticFile = staticFile
 }
 
-var client core.Source
+var (
+	sourceClient  core.Source
+	storageClient []storage.Storage
+)
 
 // os.Args
 func main() {
@@ -41,21 +44,23 @@ func main() {
 	// global.EASMySql = initialize.Mysql()
 	// global.EASRedis = initialize.Redis()
 
+	storageClient = make([]storage.Storage, 0)
 	if len(os.Args) == 1 {
 		log.Print("Default Select RedisQ Client")
-		client = core.NewRedisQClient(clientName)
+		sourceClient = core.NewRedisQClient(clientName)
+		// TODO 默认使用Kafka
 	} else {
 		clientType := os.Args[1]
 		if strings.EqualFold(clientType, redisQ) {
 			log.Print("Select RedisQ Client")
-			client = core.NewRedisQClient(clientName)
+			sourceClient = core.NewRedisQClient(clientName)
 		} else if strings.EqualFold(clientType, webSocket) {
-			client = core.NewWebSocketClient(clientName)
+			sourceClient = core.NewWebSocketClient(clientName)
 			log.Print("Select WebSocket Client")
 		}
 	}
 
-	run(client)
+	run(sourceClient)
 }
 
 func run(client core.Source) {
@@ -69,8 +74,11 @@ func run(client core.Source) {
 }
 
 var listeningFunc = func(msg string) {
-	// TODO 将msg发送到Kafka
-	go func(msg string) {
-		global.EASLog.Info("Kafka receive msg", zap.String("msg", msg))
-	}(msg)
+	// TODO 将msg发送到所有客户端
+	for _, sc := range storageClient {
+		go func(s storage.Storage, msg string) {
+			s.Save(msg)
+			global.EASLog.Info("receive msg", zap.String("msg", msg))
+		}(sc, msg)
+	}
 }
