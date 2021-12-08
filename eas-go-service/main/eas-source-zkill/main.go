@@ -48,7 +48,7 @@ func main() {
 	if len(os.Args) == 1 {
 		log.Print("Default Select RedisQ Client and Kafka Storage")
 		sourceClient = core.NewRedisQClient(clientName)
-		// TODO 默认使用Kafka
+		storageClient = append(storageClient, &storage.Kafka{Name: "Kafka"})
 	} else {
 		clientType := os.Args[1]
 		if strings.EqualFold(clientType, redisQ) {
