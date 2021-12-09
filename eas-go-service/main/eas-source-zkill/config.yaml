@@ -30,11 +30,11 @@ mysql:
 
 # kafka configuration
 kafka:
-  path:
+  path: 127.0.0.1:9092
   username:
   password:
-  topic:
-  group:
+  topic: zkill
+  group: source
 
 # redis configuration
 redis:

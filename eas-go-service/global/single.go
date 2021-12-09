@@ -29,6 +29,6 @@ var (
 )
 
 type KafkaClient struct {
-	Producer sarama.SyncProducer
+	Producer sarama.AsyncProducer
 	Consumer sarama.ConsumerGroup
 }

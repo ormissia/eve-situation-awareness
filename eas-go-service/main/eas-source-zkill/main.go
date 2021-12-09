@@ -52,7 +52,7 @@ func main() {
 
 	storageClient = make([]storage.Storage, 0)
 	if len(os.Args) == 1 {
-		log.Print("Default Select RedisQ Client and Kafka Storage")
+		global.EASLog.Info("Default Select RedisQ Client and Kafka Storage")
 		sourceClient = core.NewRedisQClient(clientName)
 		factory, err := storage.Factory(storage.KafkaStorage)
 		if err != nil {

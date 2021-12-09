@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"time"
+
 	"github.com/Shopify/sarama"
 	"go.uber.org/zap"
 
@@ -8,18 +10,15 @@ import (
 )
 
 type Kafka struct {
-	producer sarama.SyncProducer
+	producer sarama.AsyncProducer
 }
 
 func (k *Kafka) Save(msg []byte) {
-	global.EASLog.Info("kafka producer receive msg", zap.Any("msg", msg))
-	kafkaMsg := sarama.ProducerMessage{
-		Topic: global.EASConfig.Kafka.Topic,
-		Value: sarama.ByteEncoder(msg),
+	global.EASLog.Info("kafka producer receive msg", zap.String("msg", string(msg)))
+	kafkaMsg := &sarama.ProducerMessage{
+		Topic:     global.EASConfig.Kafka.Topic,
+		Value:     sarama.ByteEncoder(msg),
+		Timestamp: time.Now(),
 	}
-	message, offset, err := global.EASKafka.Producer.SendMessage(&kafkaMsg)
-	if err != nil {
-		global.EASLog.Error("kafka producer err", zap.Any("err", err))
-	}
-	global.EASLog.Info("kafka produce msg success", zap.Any("message", message), zap.Any("offset", offset))
+	global.EASKafka.Producer.Input() <- kafkaMsg
 }
