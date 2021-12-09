@@ -25,7 +25,7 @@ func NewWebSocketClient(clientName string) (c *webSocketClient) {
 	return
 }
 
-func (c *webSocketClient) Listening(outPut func(msg string)) {
+func (c *webSocketClient) Listening(outPut func(msg []byte)) {
 	// 建立连接
 	// TODO 完善header
 	header := map[string][]string{
@@ -67,6 +67,6 @@ func (c *webSocketClient) Listening(outPut func(msg string)) {
 			panic(err)
 		}
 		global.EASLog.Info("WebSocket read message:", zap.Int("mt", mt), zap.ByteString("message", message))
-		outPut(string(message))
+		outPut(message)
 	}
 }

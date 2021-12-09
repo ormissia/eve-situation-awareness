@@ -22,7 +22,7 @@ func NewRedisQClient(clientName string) (c *redisQClient) {
 	return
 }
 
-func (c *redisQClient) Listening(outPut func(msg string)) {
+func (c *redisQClient) Listening(outPut func(msg []byte)) {
 	defer func() {
 		if err := recover(); err != nil {
 			global.EASLog.Error("Listening err: ", zap.Any("err", err))
@@ -44,19 +44,18 @@ func (c *redisQClient) Listening(outPut func(msg string)) {
 			continue
 		}
 
-
 		res := make(map[string]interface{})
-		if err = json.Unmarshal(msg, &res);err !=nil{
+		if err = json.Unmarshal(msg, &res); err != nil {
 			global.EASLog.Error("Json unmarshal err", zap.Any("err", err))
 			continue
 		}
 
 		// 调用回调函数
-		packageMap,ok := res["package"]
-		if ok && packageMap!=nil{
+		packageMap, ok := res["package"]
+		if ok && packageMap != nil {
 			bytes, _ := json.Marshal(packageMap)
-			outPut(string(bytes))
-		}else {
+			outPut(bytes)
+		} else {
 			global.EASLog.Info("RedisQ no data")
 		}
 	}

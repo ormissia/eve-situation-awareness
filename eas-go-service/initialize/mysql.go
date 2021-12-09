@@ -26,7 +26,7 @@ func Mysql() (db *gorm.DB) {
 		SkipInitializeWithVersion: false, // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
-		global.EASLog.Error("Mysql connect failed:", zap.String("err:", err.Error()))
+		global.EASLog.Error("Mysql connect failed:", zap.String("err", err.Error()))
 		return nil
 	} else {
 		sqlDB, _ := db.DB()

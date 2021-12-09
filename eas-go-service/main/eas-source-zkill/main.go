@@ -41,14 +41,24 @@ var (
 func main() {
 	global.EASViper = initialize.Viper(configFileName)
 	global.EASLog = initialize.Zap()
+	global.EASKafka.Producer = initialize.KafkaProducer()
 	// global.EASMySql = initialize.Mysql()
 	// global.EASRedis = initialize.Redis()
+	defer func() {
+		if err := global.EASKafka.Consumer.Close(); err != nil {
+			global.EASLog.Error("Kafka consumer close err", zap.String("err", err.Error()))
+		}
+	}()
 
 	storageClient = make([]storage.Storage, 0)
 	if len(os.Args) == 1 {
 		log.Print("Default Select RedisQ Client and Kafka Storage")
 		sourceClient = core.NewRedisQClient(clientName)
-		storageClient = append(storageClient, &storage.Kafka{Name: "Kafka"})
+		factory, err := storage.Factory(storage.KafkaStorage)
+		if err != nil {
+			global.EASLog.Error("factory create kafka err", zap.Any("err", err))
+		}
+		storageClient = append(storageClient, factory)
 	} else {
 		clientType := os.Args[1]
 		if strings.EqualFold(clientType, redisQ) {
@@ -73,12 +83,12 @@ func run(client core.Source) {
 	client.Listening(listeningFunc)
 }
 
-var listeningFunc = func(msg string) {
-	// TODO 将msg发送到所有客户端
+var listeningFunc = func(msg []byte) {
+	// 将msg发送到所有客户端
 	for _, sc := range storageClient {
-		go func(s storage.Storage, msg string) {
+		go func(s storage.Storage, msg []byte) {
 			s.Save(msg)
-			global.EASLog.Info("receive msg", zap.String("msg", msg))
+			global.EASLog.Info("receive msg", zap.String("msg", string(msg)))
 		}(sc, msg)
 	}
 }

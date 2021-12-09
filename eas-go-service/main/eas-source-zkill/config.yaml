@@ -28,6 +28,14 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 100
 
+# kafka configuration
+kafka:
+  path:
+  username:
+  password:
+  topic:
+  group:
+
 # redis configuration
 redis:
   path:

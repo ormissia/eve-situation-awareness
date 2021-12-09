@@ -3,6 +3,7 @@ package global
 import (
 	"embed"
 
+	"github.com/Shopify/sarama"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -18,8 +19,7 @@ var (
 	EASLog    *zap.Logger
 	EASMySql  *gorm.DB
 	EASRedis  *redis.Client
-	// TODO
-	EASKafka string
+	EASKafka  *KafkaClient
 	// TODO
 	EASElasticSearch string
 
@@ -27,3 +27,8 @@ var (
 
 	EASConcurrencyControl = &singleflight.Group{}
 )
+
+type KafkaClient struct {
+	Producer sarama.SyncProducer
+	Consumer sarama.ConsumerGroup
+}
