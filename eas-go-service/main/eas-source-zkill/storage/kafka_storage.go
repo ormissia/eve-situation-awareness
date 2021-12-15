@@ -79,7 +79,7 @@ func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {
 
 	// timeStamp killId hash solo npc iskValue victim attackers labels
 	kafkaMsgStr = utils.StringSliceBuilder([]string{
-		convertToStr(time.Now().UnixMilli()),
+		convertToStr(zkill.Killmail.KillmailTime.UnixMilli()),
 		" ",
 		convertToStr(zkill.KillID),
 		" ",
