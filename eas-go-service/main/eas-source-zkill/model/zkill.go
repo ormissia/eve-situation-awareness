@@ -5,7 +5,7 @@ import "time"
 type ZKill struct {
 	KillID   int `json:"killID"`
 	Killmail struct {
-		Attackers     []Character `json:"attacers"`
+		Attackers     []Character `json:"attackers"`
 		KillmailTime  time.Time   `json:"killmail_time"`
 		SolarSystemId int         `json:"solar_system_id"`
 		Victim        Character   `json:"victim"`
