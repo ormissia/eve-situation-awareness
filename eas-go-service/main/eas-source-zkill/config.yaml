@@ -30,7 +30,8 @@ mysql:
 
 # kafka configuration
 kafka:
-  path: 127.0.0.1:9092
+#  path: 127.0.0.1:9092
+  path: kafka-node1:9092,kafka-node2:9092,kafka-node3:9092
 #  path: 192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092
   username:
   password:
