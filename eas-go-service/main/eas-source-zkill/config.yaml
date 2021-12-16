@@ -34,8 +34,8 @@ kafka:
   path: kafka-node1:9092,kafka-node2:9092,kafka-node3:9092
 #  path: node1:33143,node2:33143,node3:33143
 #  path: 192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092
-  username: zkillinfo
-  password: 8103de119d72
+  username:
+  password:
   topic: zkill
   group: source
 
