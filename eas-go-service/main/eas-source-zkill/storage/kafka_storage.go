@@ -52,7 +52,7 @@ func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {
 		在数据源头，就将这些数据做一些简单处理（在不破坏原有数据整体性的情况下）。
 	*/
 
-	// timeStamp killId hash solo npc iskValue victim attackers labels...
+	// timeStamp killId hash solo npc solarSystem iskValue victim attackers labels...
 	// iskValue: totalValue#fittedValue#destroyedValue#droppedValue
 	// victim: character
 	// attackers: character1#character2#character3...
@@ -77,7 +77,7 @@ func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {
 	}
 	attackers = strings.TrimLeft(attackers, "#")
 
-	// timeStamp killId hash solo npc iskValue victim attackers labels
+	// timeStamp killId hash solo npc solarSystem iskValue victim attackers labels...
 	kafkaMsgStr = utils.StringSliceBuilder([]string{
 		convertToStr(zkill.Killmail.KillmailTime.UnixMilli()),
 		" ",
@@ -88,6 +88,8 @@ func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {
 		convertToStr(zkill.Zkb.Solo),
 		" ",
 		convertToStr(zkill.Zkb.Npc),
+		" ",
+		convertToStr(zkill.Killmail.SolarSystemId),
 		" ",
 		iskValue,
 		" ",

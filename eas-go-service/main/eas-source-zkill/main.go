@@ -88,7 +88,6 @@ var listeningFunc = func(msg []byte) {
 	for _, sc := range storageClient {
 		go func(s storage.Storage, msg []byte) {
 			s.Save(msg)
-			global.EASLog.Info("receive msg", zap.String("msg", string(msg)))
 		}(sc, msg)
 	}
 }
