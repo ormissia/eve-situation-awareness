@@ -25,6 +25,6 @@ jobs:
         password: ${{secrets.DOCKER_PASSWORD}}
 
     - name: Build
-      working-directory: ./eas-go-service
+      working-directory: ./esa-go-service
       run: make docker
       shell: bash
