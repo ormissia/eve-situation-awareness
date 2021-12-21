@@ -1,4 +1,4 @@
-name: Go Services Makefile CI
+name: Aeon Makefile CI
 
 on:
   workflow_dispatch:

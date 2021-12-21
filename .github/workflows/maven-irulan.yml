@@ -1,4 +1,4 @@
-name: Go Services Makefile CI
+name: Irulan Makefile CI
 
 on:
   workflow_dispatch:
