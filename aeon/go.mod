@@ -1,4 +1,4 @@
-module esa-go-service
+module aeon
 
 go 1.17
 
