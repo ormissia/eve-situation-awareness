@@ -9,7 +9,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 type redisQClient struct {

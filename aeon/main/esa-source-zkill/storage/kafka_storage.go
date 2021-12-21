@@ -10,9 +10,9 @@ import (
 	"github.com/Shopify/sarama"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-source-zkill/model"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/main/esa-source-zkill/model"
+	"aeon/utils"
 )
 
 const (

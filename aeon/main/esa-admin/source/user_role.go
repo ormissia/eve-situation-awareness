@@ -3,8 +3,8 @@ package source
 import (
 	"gorm.io/gorm"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-admin/model"
+	"aeon/global"
+	"aeon/main/esa-admin/model"
 )
 
 var UserRole = new(userRole)

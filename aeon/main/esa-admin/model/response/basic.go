@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"esa-go-service/utils"
+	"aeon/utils"
 )
 
 type response struct {

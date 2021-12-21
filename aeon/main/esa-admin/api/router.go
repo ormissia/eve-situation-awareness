@@ -3,8 +3,8 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 
-	routers2 "esa-go-service/main/esa-admin/api/routers"
-	middleware2 "esa-go-service/main/esa-admin/middleware"
+	routers2 "aeon/main/esa-admin/api/routers"
+	middleware2 "aeon/main/esa-admin/middleware"
 )
 
 func Routers() (r *gin.Engine) {

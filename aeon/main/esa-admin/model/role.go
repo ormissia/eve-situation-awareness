@@ -3,7 +3,7 @@ package model
 import (
 	"fmt"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 type Role struct {

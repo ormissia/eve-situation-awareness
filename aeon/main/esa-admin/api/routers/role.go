@@ -3,7 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
-	"esa-go-service/main/esa-admin/api/v1"
+	"aeon/main/esa-admin/api/v1"
 )
 
 func InitRoleRouter(r *gin.RouterGroup) {

@@ -4,7 +4,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 var Casbin = new(casbin)

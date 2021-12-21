@@ -5,7 +5,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 type Storage interface {

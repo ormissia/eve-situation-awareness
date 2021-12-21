@@ -7,7 +7,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 var (

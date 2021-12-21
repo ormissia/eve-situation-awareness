@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 // Path必须以"/"斜杠结尾

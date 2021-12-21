@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-admin/model/request"
-	"esa-go-service/main/esa-admin/model/response"
-	"esa-go-service/main/esa-admin/service"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/main/esa-admin/model/request"
+	"aeon/main/esa-admin/model/response"
+	"aeon/main/esa-admin/service"
+	"aeon/utils"
 )
 
 // Casbin 鉴权

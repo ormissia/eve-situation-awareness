@@ -7,7 +7,7 @@ import (
 	"github.com/Shopify/sarama"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 var once sync.Once

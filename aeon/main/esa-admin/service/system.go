@@ -7,11 +7,11 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"esa-go-service/config"
-	"esa-go-service/global"
-	model2 "esa-go-service/main/esa-admin/model"
-	"esa-go-service/main/esa-admin/model/request"
-	source2 "esa-go-service/main/esa-admin/source"
+	"aeon/config"
+	"aeon/global"
+	model2 "aeon/main/esa-admin/model"
+	"aeon/main/esa-admin/model/request"
+	source2 "aeon/main/esa-admin/source"
 )
 
 func InitDB(conf request.InitDB) (err error) {

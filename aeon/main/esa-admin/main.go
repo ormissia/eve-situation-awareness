@@ -3,9 +3,9 @@ package main
 import (
 	"embed"
 
-	"esa-go-service/global"
-	"esa-go-service/initialize"
-	"esa-go-service/main/esa-admin/api"
+	"aeon/global"
+	"aeon/initialize"
+	"aeon/main/esa-admin/api"
 )
 
 //go:embed config.yaml

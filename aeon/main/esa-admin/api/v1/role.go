@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-admin/model"
-	"esa-go-service/main/esa-admin/model/response"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/main/esa-admin/model"
+	"aeon/main/esa-admin/model/response"
+	"aeon/utils"
 )
 
 // CreateRole 创建角色

@@ -1,7 +1,7 @@
 package response
 
 import (
-	"esa-go-service/main/esa-admin/model"
+	"aeon/main/esa-admin/model"
 )
 
 type Login struct {

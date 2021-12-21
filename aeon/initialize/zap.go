@@ -9,8 +9,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"esa-go-service/global"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/utils"
 )
 
 var level zapcore.Level

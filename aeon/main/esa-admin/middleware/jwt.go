@@ -10,10 +10,10 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-admin/model/request"
-	"esa-go-service/main/esa-admin/model/response"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/main/esa-admin/model/request"
+	"aeon/main/esa-admin/model/response"
+	"aeon/utils"
 )
 
 // JWT 检查token

@@ -8,11 +8,11 @@ import (
 
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
-	"esa-go-service/initialize"
-	"esa-go-service/main/esa-source-zkill/core"
-	"esa-go-service/main/esa-source-zkill/storage"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/initialize"
+	"aeon/main/esa-source-zkill/core"
+	"aeon/main/esa-source-zkill/storage"
+	"aeon/utils"
 )
 
 //go:embed config.yaml

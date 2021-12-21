@@ -5,8 +5,8 @@ import (
 
 	"gorm.io/gorm"
 
-	"esa-go-service/global"
-	model2 "esa-go-service/main/esa-admin/model"
+	"aeon/global"
+	model2 "aeon/main/esa-admin/model"
 )
 
 var Role = new(role)

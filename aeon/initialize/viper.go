@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 func Viper(fileName string) (v *viper.Viper) {

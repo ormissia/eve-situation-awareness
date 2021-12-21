@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 func Mysql() (db *gorm.DB) {

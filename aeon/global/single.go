@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
 
-	"esa-go-service/config"
+	"aeon/config"
 )
 
 var (

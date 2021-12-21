@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 
-	"esa-go-service/global"
-	"esa-go-service/main/esa-admin/middleware"
-	"esa-go-service/main/esa-admin/model"
-	request2 "esa-go-service/main/esa-admin/model/request"
-	response2 "esa-go-service/main/esa-admin/model/response"
-	"esa-go-service/utils"
+	"aeon/global"
+	"aeon/main/esa-admin/middleware"
+	"aeon/main/esa-admin/model"
+	request2 "aeon/main/esa-admin/model/request"
+	response2 "aeon/main/esa-admin/model/response"
+	"aeon/utils"
 )
 
 // GetUserInfo 获取任一用户的信息
@@ -56,7 +56,7 @@ func Login(c *gin.Context) {
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,                             // 签名生效时间
 			ExpiresAt: time.Now().Unix() + global.ESAConfig.JWT.ExpiresTime, // 过期时间 7天  配置文件
-			Issuer:    "esa-go-service",                                     // 签名的发行者
+			Issuer:    "aeon",                                               // 签名的发行者
 		},
 	}
 	token, err := middleware.RelesaeToken(claims)

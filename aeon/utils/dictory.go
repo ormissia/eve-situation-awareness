@@ -5,7 +5,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 // PathExists 文件目录是否存在

@@ -3,7 +3,7 @@ package model
 import (
 	uuid "github.com/satori/go.uuid"
 
-	"esa-go-service/global"
+	"aeon/global"
 )
 
 // User 用户相关
