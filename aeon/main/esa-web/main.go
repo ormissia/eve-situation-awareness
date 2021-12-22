@@ -6,7 +6,7 @@ import (
 
 	"aeon/global"
 	"aeon/initialize"
-	"aeon/main/esa-admin/api"
+	"aeon/main/esa-web/api"
 )
 
 //go:embed config.yaml
@@ -20,13 +20,16 @@ func init() {
 	global.ESAStaticFile = staticFile
 }
 
+// os.Args
 func main() {
 	global.ESAViper = initialize.Viper(configFileName)
 	global.ESALog = initialize.Zap()
+	// global.ESAKafka.Producer = initialize.KafkaProducer()
 	global.ESAMySql = initialize.Mysql()
-	global.ESARedis = initialize.Redis()
-
+	// global.ESARedis = initialize.Redis()
 	r := api.Routers()
+
+	// TODO 初始化缓存
 
 	if global.ESAMySql != nil {
 		// 程序结束前关闭数据库链接

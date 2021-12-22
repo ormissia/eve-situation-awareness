@@ -29,6 +29,7 @@ const (
 
 	// ErrCodeParamError 参数错误
 	ErrCodeParamError ResponseCode = 1000 + iota
+	ErrCodeParamShouldBindError
 	ErrCodeMissingParamError
 
 	// 处理错误
@@ -50,8 +51,9 @@ var responseMsgMap = map[ResponseCode]string{
 	ErrTokenInvalid:     "无效token",
 	ErrTokenOverTime:    "token超时",
 
-	ErrCodeParamError:        "参数错误",
-	ErrCodeMissingParamError: "缺少参数",
+	ErrCodeParamError:           "参数错误",
+	ErrCodeParamShouldBindError: "参数解析错误",
+	ErrCodeMissingParamError:    "缺少参数",
 
 	ErrUserNotFound:      "用户不存在",
 	ErrUserNotFoundOrErr: "用户不存在或密码错误",

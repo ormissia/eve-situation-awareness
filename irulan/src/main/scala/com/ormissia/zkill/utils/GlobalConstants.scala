@@ -44,19 +44,19 @@ case class Character(
                       characterId: Int,
                       allianceId: Int,
                       corporationId: Int,
-                      damageDone: Long,
-                      damageTaken: Long,
                       shipTypeId: Int,
                       weaponTypeId: Int,
+                      damageDone: Long,
+                      damageTaken: Long,
                       finalBlow: Boolean,
                     )
 
 
 case class SolarSystemSink(
-                            dt: Int,
                             solarSystemId: Int,
                             killQuantity: Int,
                             killValue: Double,
+                            dt: String,
                           )
 
 object GlobalConstants {

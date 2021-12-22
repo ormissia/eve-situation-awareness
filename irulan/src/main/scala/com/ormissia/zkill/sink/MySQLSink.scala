@@ -15,10 +15,7 @@ class MySQLSink[T](classType: Class[_ <: T]) extends RichSinkFunction[T] {
     if (classType.getName.equals(classOf[SolarSystemSink].getName)) {
       val info = value.asInstanceOf[SolarSystemSink]
 
-      //TODO
-      //println(s"写入${info}")
-
-      pst.setInt(1, info.dt)
+      pst.setString(1, info.dt)
       pst.setInt(2, info.solarSystemId)
       pst.setInt(3, info.killQuantity)
       pst.setDouble(4, info.killValue)

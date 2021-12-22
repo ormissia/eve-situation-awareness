@@ -72,14 +72,14 @@ object KillValue {
         ))
       .aggregate(
         new AggregateFunction[ZKillInfo, SolarSystemSink, SolarSystemSink] {
-          override def createAccumulator(): SolarSystemSink = SolarSystemSink(0, 0, 0, 0)
+          override def createAccumulator(): SolarSystemSink = SolarSystemSink(0, 0, 0, "")
 
           override def add(value: ZKillInfo, accumulator: SolarSystemSink): SolarSystemSink = {
             SolarSystemSink(
-              0,
               value.solarSystem,
               accumulator.killQuantity + 1,
               accumulator.killValue + value.totalValue,
+              "",
             )
           }
 
@@ -87,24 +87,23 @@ object KillValue {
 
           override def merge(a: SolarSystemSink, b: SolarSystemSink): SolarSystemSink = {
             SolarSystemSink(
-              0,
               a.solarSystemId,
               a.killQuantity + b.killQuantity,
               a.killValue + b.killValue,
+              "",
             )
           }
         },
         new WindowFunction[SolarSystemSink, SolarSystemSink, Int, TimeWindow] {
           override def apply(key: Int, window: TimeWindow, input: Iterable[SolarSystemSink], out: Collector[SolarSystemSink]): Unit = {
-
-
             val dateFormat = new SimpleDateFormat(ESAConst.DATE_FORMAT_yyyyMMddHH)
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-            var dt = dateFormat.format(window.getEnd).toInt
+            var dt = dateFormat.format(window.getEnd)
             if (window.getEnd % 3600000 == 0) {
-              dt = dateFormat.format(window.getStart).toInt
+              dt = dateFormat.format(window.getStart)
             }
-            val result = SolarSystemSink(dt, input.head.solarSystemId, input.head.killQuantity, input.head.killValue)
+
+            val result = SolarSystemSink(input.head.solarSystemId, input.head.killQuantity, input.head.killValue, dt)
             out.collect(result)
 
             // TODO log
