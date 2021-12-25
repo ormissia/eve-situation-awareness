@@ -25,7 +25,7 @@ mysql:
   dbname: eve_situation_awareness
   username: root
   password: 123456
-  config: charset=utf8mb4&parseTime=True
+  config: charset=utf8&parseTime=True&loc=Local
   max-idle-conns: 10
   max-open-conns: 100
 

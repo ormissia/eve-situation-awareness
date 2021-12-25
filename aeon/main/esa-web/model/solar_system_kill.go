@@ -9,9 +9,9 @@ import (
 )
 
 type SolarSystemKill struct {
-	SolarSystemId int    `json:"solar_system_id" form:"solar_system_id" gorm:"column:solar_system_id"`
-	KillQuantity  int    `json:"kill_quantity" form:"kill_quantity" gorm:"column:kill_quantity"`
-	KillValue     int    `json:"kill_value" form:"kill_value" gorm:"column:kill_value"`
+	SolarSystemId int64  `json:"solar_system_id" form:"solar_system_id" gorm:"column:solar_system_id"`
+	KillQuantity  int64  `json:"kill_quantity" form:"kill_quantity" gorm:"column:kill_quantity"`
+	KillValue     int64  `json:"kill_value" form:"kill_value" gorm:"column:kill_value"`
 	Dt            string `json:"dt" form:"dt" gorm:"column:dt"`
 	SolarSystem   string `json:"solar_system" form:"-" gorm:"-"`
 	CreateTime    string `json:"create_time" form:"create_time" gorm:"column:create_time"`
