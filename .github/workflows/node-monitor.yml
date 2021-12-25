@@ -17,5 +17,4 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build -t ormissia/monitor .
-        run：docker push ormissia/monitor
+        run: docker build -t ormissia/monitor . && docker push ormissia/monitor
