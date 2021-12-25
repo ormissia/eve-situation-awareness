@@ -24,6 +24,8 @@ func SearchSolarSystemKill(c *gin.Context) {
 		return
 	}
 
+	global.ESALog.Info("params", zap.Any("BaseParams", param), zap.Any("SolarSystemKill", solarSystemKill))
+
 	solarSystemKills, err := solarSystemKill.SelectSolarSystem(param)
 	if err != nil {
 		global.ESALog.Error("select mysql err", zap.Any("err", err))
