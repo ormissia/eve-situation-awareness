@@ -4,6 +4,10 @@
 log
 # 编译输出
 target
+# 前端依赖
+node_modules
+# 编译结果
+build
 
 # MacOS缓存
 .DS_Store

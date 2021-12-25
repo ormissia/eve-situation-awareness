@@ -9,12 +9,12 @@ import (
 )
 
 type SolarSystemKill struct {
-	SolarSystemId int    `json:"solar_system_id" form:"solar_system_id" gorm:"solar_system_id"`
-	KillQuantity  int    `json:"kill_quantity" form:"kill_quantity" gorm:"kill_quantity"`
-	KillValue     int    `json:"kill_value" form:"kill_value" gorm:"kill_value"`
-	Dt            string `json:"dt" form:"dt" gorm:"dt"`
+	SolarSystemId int    `json:"solar_system_id" form:"solar_system_id" gorm:"column:solar_system_id"`
+	KillQuantity  int    `json:"kill_quantity" form:"kill_quantity" gorm:"column:kill_quantity"`
+	KillValue     int    `json:"kill_value" form:"kill_value" gorm:"column:kill_value"`
+	Dt            string `json:"dt" form:"dt" gorm:"column:dt"`
 	SolarSystem   string `json:"solar_system" form:"-" gorm:"-"`
-	CreateTime    string `json:"create_time" form:"create_time" gorm:"create_time"`
+	CreateTime    string `json:"create_time" form:"create_time" gorm:"column:create_time"`
 }
 
 func (SolarSystemKill) TableName() string {

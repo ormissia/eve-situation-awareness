@@ -20,7 +20,8 @@ zap:
 
 # mysql configuration
 mysql:
-  path: 127.0.0.1:3306
+  path: mysql:3306
+#  path: 127.0.0.1:3306
   dbname: eve_situation_awareness
   username: root
   password: 123
