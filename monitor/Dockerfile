@@ -31,4 +31,4 @@ WORKDIR /web/share
 VOLUME /web/share
 
 # 声明服务端口
-EXPOSE 8080
+EXPOSE 8081

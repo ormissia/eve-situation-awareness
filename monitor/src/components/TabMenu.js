@@ -6,8 +6,10 @@ export default class TabMenu extends Component {
     state = {
         activeItem: 'day',
     }
+
     handleItemClick = (e, {name}) => {
         this.setState({activeItem: name})
+        this.props.getTabMenuTimeType(name)
     }
 
     render() {
@@ -41,7 +43,7 @@ export default class TabMenu extends Component {
                     <Menu.Item>
                         <Dropdown text='Login'>
                             <Dropdown.Menu>
-                                <Dropdown.Item><img src={SSOImg}/></Dropdown.Item>
+                                <Dropdown.Item><img src={SSOImg} alt='login'/></Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Menu.Item>

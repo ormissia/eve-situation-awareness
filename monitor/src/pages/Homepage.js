@@ -1,16 +1,14 @@
 import {
     Header,
     Container,
-    Input,
-    Menu,
     Segment,
-    Dropdown,
 } from 'semantic-ui-react'
-import SSOImg from '../assets/eve-sso-login-black-large.png'
-
 import React, {Component} from "react";
+
 import axios from "axios";
+import TabMenu from "../components/TabMenu";
 import Chart from "../components/Chart";
+import API_GET_SOLAR_SYSTEM_KILL from "../utils/Api";
 
 const style = {
     h1: {
@@ -31,7 +29,6 @@ const style = {
 class Homepage extends Component {
 
     state = {
-        activeItem: 'day',
         chartOption: {
             title: {
                 text: '击杀趋势',
@@ -74,10 +71,10 @@ class Homepage extends Component {
         }
     }
 
-    handleItemClick = (e, {name}) => {
-        this.setState({activeItem: name})
-        console.log(name)
-        axios.get('http://localhost:8080/web/solar_system_kill?time_type='+name+'&start_time_stamp=1639929600000&end_time_stamp=&page_size=24')
+    getTabMenuTimeType = (timeType)=>{
+        console.log('收到时间类型'+timeType)
+        API_GET_SOLAR_SYSTEM_KILL(timeType).get('/solar_system_kill?time_type='+timeType+'&start_time_stamp=1639929600000&end_time_stamp=&page_size=24')
+        // axios.get('http://127.0.0.1:8080/web/solar_system_kill?time_type='+timeType+'&start_time_stamp=1639929600000&end_time_stamp=&page_size=24')
             .then(response => {
                 console.log(response.data.data.Y.kill_quantity)
                 const initOption = {
@@ -110,46 +107,10 @@ class Homepage extends Component {
     }
 
     render() {
-        const {activeItem} = this.state
-
         return (
             <div>
                 <Container>
-                    <Menu pointing>
-                        <Menu.Item
-                            name='year'
-                            active={activeItem === 'year'}
-                            onClick={this.handleItemClick}
-                        />
-                        <Menu.Item
-                            name='month'
-                            active={activeItem === 'month'}
-                            onClick={this.handleItemClick}
-                        />
-                        <Menu.Item
-                            name='day'
-                            active={activeItem === 'day'}
-                            onClick={this.handleItemClick}
-                        />
-                        <Menu.Item
-                            name='hour'
-                            active={activeItem === 'hour'}
-                            onClick={this.handleItemClick}
-                        />
-                        <Menu.Menu position='right'>
-                            <Menu.Item>
-                                <Input icon='search' placeholder='Solar System'/>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Dropdown text='Login'>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item><img src={SSOImg}/></Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Menu.Item>
-                        </Menu.Menu>
-
-                    </Menu>
+                    <TabMenu getTabMenuTimeType={this.getTabMenuTimeType}/>
 
                     <Header as='h1' content='EVE Situation Awareness' style={style.h1} textAlign='center'/>
 
