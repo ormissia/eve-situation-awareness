@@ -25,10 +25,5 @@ RUN rm -f  /etc/nginx/nginx.conf
 # 将Nginx配置文件复制进去
 COPY nginx.conf /etc/nginx
 
-# 切换工作目录
-WORKDIR /web/share
-# 开启映射
-VOLUME /web/share
-
 # 声明服务端口
 EXPOSE 8081
