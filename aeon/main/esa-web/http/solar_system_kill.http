@@ -1,4 +1,4 @@
-GET http://localhost:8080/web/solar_system_kill?time_type=hour&start_time_stamp=1639929600000&end_time_stamp=&page_size=24
+GET http://localhost:8080/web/solar_system_kill?time_type=day&start_time_stamp=1606665600000&end_time_stamp=1609430399999&page_size=
 Accept: application/json
 
 ###

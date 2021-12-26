@@ -5,7 +5,6 @@ import {
 } from 'semantic-ui-react'
 import React, {Component} from "react";
 
-import axios from "axios";
 import TabMenu from "../components/TabMenu";
 import Chart from "../components/Chart";
 import API_GET_SOLAR_SYSTEM_KILL from "../utils/Api";
@@ -30,6 +29,7 @@ class Homepage extends Component {
 
     state = {
         chartOption: {
+            color: ['#B0C4DE','#191970'],
             title: {
                 text: '击杀趋势',
                 left: 'center',
@@ -56,14 +56,14 @@ class Homepage extends Component {
             series: [
                 {
                     name: 'kill quantity',
-                    type: 'line',
-                    smooth: true,
+                    type: 'bar',
                     yAxisIndex: 0,
                     data: []
                 },
                 {
                     name: 'kill value',
-                    type: 'bar',
+                    type: 'line',
+                    smooth: true,
                     yAxisIndex: 1,
                     data: []
                 }
@@ -71,12 +71,9 @@ class Homepage extends Component {
         }
     }
 
-    getTabMenuTimeType = (timeType)=>{
-        console.log('收到时间类型'+timeType)
-        API_GET_SOLAR_SYSTEM_KILL(timeType).get('/solar_system_kill?time_type='+timeType+'&start_time_stamp=1639929600000&end_time_stamp=&page_size=24')
-        // axios.get('http://127.0.0.1:8080/web/solar_system_kill?time_type='+timeType+'&start_time_stamp=1639929600000&end_time_stamp=&page_size=24')
+    getTabMenuTimeType = (timeType, startTS, endTS) => {
+        API_GET_SOLAR_SYSTEM_KILL(timeType).get('/solar_system_kill?time_type=' + timeType + '&start_time_stamp=' + startTS + '&end_time_stamp=' + endTS + '&page_size=')
             .then(response => {
-                console.log(response.data.data.Y.kill_quantity)
                 const initOption = {
                     xAxis: {
                         data: response.data.data.X
@@ -84,25 +81,21 @@ class Homepage extends Component {
                     series: [
                         {
                             name: 'kill quantity',
-                            type: 'line',
-                            smooth: true,
+                            type: 'bar',
                             yAxisIndex: 0,
                             data: response.data.data.Y.kill_quantity
                         },
                         {
                             name: 'kill value',
-                            type: 'bar',
+                            type: 'line',
+                            smooth: true,
                             yAxisIndex: 1,
                             data: response.data.data.Y.kill_value
                         }
                     ]
                 }
                 const newOption = Object.assign(this.state.chartOption, initOption)
-                console.log(111)
-                console.log(newOption)
                 this.setState({chartOption: newOption})
-                console.log(222)
-                console.log(this.state.chartOption)
             })
     }
 

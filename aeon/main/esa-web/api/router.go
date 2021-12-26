@@ -13,6 +13,7 @@ func Routers() (r *gin.Engine) {
 
 	r.GET("/info", v1.Info)
 
+	// TODO 限流
 	webApi := r.Group("/web")
 	webApi.Use(middleware.Cors())
 	{

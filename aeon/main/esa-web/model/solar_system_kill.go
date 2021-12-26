@@ -33,7 +33,7 @@ func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSy
 	if params.EndTimeStamp != 0 {
 		end := time.UnixMilli(params.EndTimeStamp)
 		endStr := end.Format(utils.DTTimeFormat)
-		db.Where("dt >= ?", endStr)
+		db.Where("dt <= ?", endStr)
 	}
 
 	dtFormat := ""
@@ -59,11 +59,11 @@ func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSy
 	if params.PageSize != 0 {
 		db.Limit(params.PageSize)
 	} else {
-		// 默认限制100条结果
-		db.Limit(100)
+		// 默认限制8760条结果
+		db.Limit(8760)
 	}
 
-	db.Order("dt desc")
+	db.Order("dt")
 
 	err = db.Select("dt, solar_system_id, sum(kill_quantity) as kill_quantity, sum(kill_value) as kill_value").
 		Scan(&result).Error
