@@ -25,15 +25,23 @@ func main() {
 	global.ESAViper = initialize.Viper(configFileName)
 	global.ESALog = initialize.Zap()
 	// global.ESAKafka.Producer = initialize.KafkaProducer()
-	global.ESAMySql = initialize.Mysql()
+	global.ESAMySqlESA = initialize.Mysql(global.ESAConfig.MysqlESA)
+	global.ESAMySqlBasic = initialize.Mysql(global.ESAConfig.MysqlBasic)
 	// global.ESARedis = initialize.Redis()
 	r := api.Routers()
 
 	// TODO 初始化缓存
 
-	if global.ESAMySql != nil {
+	if global.ESAMySqlESA != nil {
 		// 程序结束前关闭数据库链接
-		db, _ := global.ESAMySql.DB()
+		db, _ := global.ESAMySqlESA.DB()
+		defer func() {
+			_ = db.Close()
+		}()
+	}
+	if global.ESAMySqlBasic != nil {
+		// 程序结束前关闭数据库链接
+		db, _ := global.ESAMySqlBasic.DB()
 		defer func() {
 			_ = db.Close()
 		}()

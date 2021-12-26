@@ -17,7 +17,7 @@ var (
 
 func InitCasbinEnforcer() *casbin.SyncedEnforcer {
 	once.Do(func() {
-		a, err := gormadapter.NewAdapterByDB(global.ESAMySql)
+		a, err := gormadapter.NewAdapterByDB(global.ESAMySqlESA)
 		if err != nil {
 			global.ESALog.Error("Casbin load data to mysql failed:", zap.String("err", err.Error()))
 			return

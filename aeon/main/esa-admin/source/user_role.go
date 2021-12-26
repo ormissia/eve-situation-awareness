@@ -16,7 +16,7 @@ var userRoles = []model.UserRole{
 }
 
 func (a *userRole) Init() error {
-	return global.ESAMySql.Transaction(func(db *gorm.DB) error {
+	return global.ESAMySqlESA.Transaction(func(db *gorm.DB) error {
 		if err := db.Create(&userRoles).Error; err != nil {
 			// 遇到错误时回滚事务
 			return err

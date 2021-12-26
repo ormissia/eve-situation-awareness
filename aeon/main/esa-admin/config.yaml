@@ -19,9 +19,9 @@ zap:
   log-in-console: true
 
 # mysql configuration
-mysql:
+mysql-esa:
   path: 127.0.0.1:3306
-  dbname: esa_admin
+  dbname: eve_situation_awareness
   username: root
   password: 123
   config: charset=utf8&parseTime=True&loc=Local

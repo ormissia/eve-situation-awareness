@@ -23,7 +23,7 @@ func (User) TableName() string {
 }
 
 func (u *User) Login() (user User, err error) {
-	db := global.ESAMySql.Model(u)
+	db := global.ESAMySqlESA.Model(u)
 
 	db = db.Where("username = ?", u.Username).Where("password = ?", u.Password)
 	err = db.Find(&user).Error
@@ -32,7 +32,7 @@ func (u *User) Login() (user User, err error) {
 }
 
 func (u *User) SelectUserByUUID(uuid string) (user User, err error) {
-	db := global.ESAMySql.Model(u)
+	db := global.ESAMySqlESA.Model(u)
 
 	db = db.Where("uuid = ?", uuid)
 	err = db.Preload("Roles").Find(&user).Error

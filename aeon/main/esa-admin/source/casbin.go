@@ -39,8 +39,8 @@ var casbins = []gormadapter.CasbinRule{
 }
 
 func (a *casbin) Init() error {
-	_ = global.ESAMySql.AutoMigrate(gormadapter.CasbinRule{})
-	return global.ESAMySql.Transaction(func(tx *gorm.DB) error {
+	_ = global.ESAMySqlESA.AutoMigrate(gormadapter.CasbinRule{})
+	return global.ESAMySqlESA.Transaction(func(tx *gorm.DB) error {
 		if tx.Find(&[]gormadapter.CasbinRule{}).RowsAffected != 0 {
 			global.ESALog.Warn("表的初始数据已存在")
 			return nil

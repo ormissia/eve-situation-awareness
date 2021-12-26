@@ -20,7 +20,7 @@ func (Role) TableName() string {
 }
 
 func (r *Role) Select(ids []uint, rolename string, parentRoleId uint, pageNo, pageSize int) (total int64, result []Role, err error) {
-	db := global.ESAMySql.Model(r)
+	db := global.ESAMySqlESA.Model(r)
 
 	if len(ids) > 0 {
 		db = db.Where("id in ?", ids)
@@ -42,14 +42,14 @@ func (r *Role) Select(ids []uint, rolename string, parentRoleId uint, pageNo, pa
 }
 
 func (r *Role) Creat() (err error) {
-	db := global.ESAMySql.Model(r)
+	db := global.ESAMySqlESA.Model(r)
 
 	err = db.Create(r).Error
 	return
 }
 
 func (r *Role) Update() (err error) {
-	db := global.ESAMySql.Model(r)
+	db := global.ESAMySqlESA.Model(r)
 
 	db = db.Where("id = ?", r.ID)
 	err = db.Updates(map[string]interface{}{

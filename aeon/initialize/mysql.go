@@ -6,11 +6,12 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
+	"aeon/config"
 	"aeon/global"
 )
 
-func Mysql() (db *gorm.DB) {
-	m := global.ESAConfig.Mysql
+func Mysql(mysqlConf config.Mysql) (db *gorm.DB) {
+	m := mysqlConf
 	if m.DBName == "" {
 		global.ESALog.Warn("mysql connect failed: need DBName conf")
 		return nil
@@ -25,7 +26,7 @@ func Mysql() (db *gorm.DB) {
 		DontSupportRenameColumn:   true,  // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
 		SkipInitializeWithVersion: false, // 根据版本自动配置
 	}
-	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
+	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig(mysqlConf)); err != nil {
 		global.ESALog.Error("Mysql connect failed:", zap.String("err", err.Error()))
 		return nil
 	} else {
@@ -37,9 +38,9 @@ func Mysql() (db *gorm.DB) {
 	}
 }
 
-func gormConfig() (config *gorm.Config) {
+func gormConfig(mysqlConf config.Mysql) (config *gorm.Config) {
 	config = &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
-	switch global.ESAConfig.Mysql.LogMode {
+	switch mysqlConf.LogMode {
 	case "silent", "Silent":
 		config.Logger = logger.Default.LogMode(logger.Silent)
 	case "error", "Error":

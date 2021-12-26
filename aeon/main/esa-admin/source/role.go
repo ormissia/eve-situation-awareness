@@ -18,7 +18,7 @@ var roles = []model2.Role{
 }
 
 func (a *role) Init() error {
-	return global.ESAMySql.Transaction(func(db *gorm.DB) error {
+	return global.ESAMySqlESA.Transaction(func(db *gorm.DB) error {
 		if db.Where("id IN ?", []int{1}).Find(&[]model2.Role{}).RowsAffected == 1 {
 			global.ESALog.Warn("表的初始数据已存在")
 			return nil

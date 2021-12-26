@@ -48,15 +48,15 @@ func InitDB(conf request.InitDB) (err error) {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(myMysqlConfig.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(myMysqlConfig.MaxOpenConns)
-		global.ESAMySql = db
+		global.ESAMySqlESA = db
 	}
 
 	// 初始化表结构
-	if err = global.ESAMySql.AutoMigrate(
+	if err = global.ESAMySqlESA.AutoMigrate(
 		model2.Role{},
 		model2.User{},
 	); err != nil {
-		global.ESAMySql = nil
+		global.ESAMySqlESA = nil
 		return err
 	}
 
@@ -67,7 +67,7 @@ func InitDB(conf request.InitDB) (err error) {
 		source2.UserRole,
 		source2.Casbin,
 	); err != nil {
-		global.ESAMySql = nil
+		global.ESAMySqlESA = nil
 		return err
 	}
 

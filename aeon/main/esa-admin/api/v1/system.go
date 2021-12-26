@@ -16,7 +16,7 @@ func Ping(c *gin.Context) {
 }
 
 func InitMySQL(c *gin.Context) {
-	if global.ESAMySql != nil {
+	if global.ESAMySqlESA != nil {
 		global.ESALog.Error("已存在数据库配置")
 		response.ErrorResponseCustom(c, utils.ErrCodeMySQLError, "已存在数据库配置")
 		return

@@ -2,11 +2,9 @@ package main
 
 import (
 	"embed"
-	"strconv"
 
 	"aeon/global"
 	"aeon/initialize"
-	"aeon/main/esa-admin/api"
 )
 
 //go:embed config.yaml
@@ -23,20 +21,20 @@ func init() {
 func main() {
 	global.ESAViper = initialize.Viper(configFileName)
 	global.ESALog = initialize.Zap()
-	global.ESAMySql = initialize.Mysql()
+	global.ESAMySqlESA = initialize.Mysql(global.ESAConfig.MysqlESA)
 	global.ESARedis = initialize.Redis()
 
-	r := api.Routers()
-
-	if global.ESAMySql != nil {
+	if global.ESAMySqlESA != nil {
 		// 程序结束前关闭数据库链接
-		db, _ := global.ESAMySql.DB()
+		db, _ := global.ESAMySqlESA.DB()
 		defer func() {
 			_ = db.Close()
 		}()
 	}
-	err := r.Run(":" + strconv.Itoa(global.ESAConfig.Server.Port))
-	if err != nil {
-		panic(err)
-	}
+
+	// r := api.Routers()
+	// err := r.Run(":" + strconv.Itoa(global.ESAConfig.Server.Port))
+	// if err != nil {
+	// 	panic(err)
+	// }
 }

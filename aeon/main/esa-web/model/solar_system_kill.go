@@ -22,7 +22,7 @@ func (SolarSystemKill) TableName() string {
 }
 
 func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSystemKill, err error) {
-	db := global.ESAMySql.Model(s)
+	db := global.ESAMySqlESA.Model(s)
 
 	if params.StartTimeStamp != 0 {
 		start := time.UnixMilli(params.StartTimeStamp)
