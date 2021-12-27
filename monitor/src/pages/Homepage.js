@@ -7,7 +7,7 @@ import React, {Component} from "react";
 
 import TabMenu from "../components/TabMenu";
 import Chart from "../components/Chart";
-import API_GET_SOLAR_SYSTEM_KILL from "../utils/Api";
+import {API_GET_SOLAR_SYSTEM_KILL} from "../utils/Api";
 
 const style = {
     h1: {
@@ -29,7 +29,7 @@ class Homepage extends Component {
 
     state = {
         chartOption: {
-            color: ['#B0C4DE','#191970'],
+            color: ['#B0C4DE', '#191970'],
             title: {
                 text: '击杀趋势',
                 left: 'center',
@@ -71,8 +71,13 @@ class Homepage extends Component {
         }
     }
 
-    getTabMenuTimeType = (timeType, startTS, endTS) => {
-        API_GET_SOLAR_SYSTEM_KILL(timeType).get('/solar_system_kill?time_type=' + timeType + '&start_time_stamp=' + startTS + '&end_time_stamp=' + endTS + '&page_size=')
+    getTabMenuTimeType = (timeType, startTS, endTS, solarSystemName) => {
+        API_GET_SOLAR_SYSTEM_KILL(timeType).get(
+            '/solar_system_kill?time_type=' + timeType
+            + '&start_time_stamp=' + startTS
+            + '&end_time_stamp=' + endTS
+            + '&page_size='
+            + '&solar_system_name=' + solarSystemName)
             .then(response => {
                 const initOption = {
                     xAxis: {

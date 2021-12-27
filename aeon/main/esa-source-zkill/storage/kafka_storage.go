@@ -29,13 +29,13 @@ func (k *Kafka) Save(msg []byte) {
 	global.ESALog.Info("kafka producer send msg", zap.String("msg", kafkaMsgStr))
 
 	kafkaMsg := &sarama.ProducerMessage{
-		Topic:     global.ESAConfig.Kafka.Topic,
+		Topic:     global.ESAConfig.KafkaIn.Topic,
 		Value:     sarama.StringEncoder(kafkaMsgStr),
 		Timestamp: time.Now(),
 	}
 
 	// TODO 观察是否需要序列化之后再发kafka
-	global.ESAKafka.Producer.Input() <- kafkaMsg
+	global.ESAKafkaIn.Producer.Input() <- kafkaMsg
 }
 
 func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {

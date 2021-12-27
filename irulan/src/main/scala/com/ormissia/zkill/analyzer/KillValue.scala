@@ -1,49 +1,36 @@
 package com.ormissia.zkill.analyzer
 
 import com.ormissia.zkill.sink.MySQLSink
+import com.ormissia.zkill.source.KafkaSource
 import com.ormissia.zkill.transformation.KafkaLineToZKillInfo
 import com.ormissia.zkill.utils.{ESAConst, SolarSystemSink, ZKillInfo}
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
-import org.apache.flink.api.common.functions.{AggregateFunction}
-import org.apache.flink.api.common.serialization.SimpleStringSchema
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.streaming.api.scala._
+import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.streaming.api.scala.function.WindowFunction
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.util.Collector
-import org.apache.kafka.common.serialization.StringSerializer
+import org.apache.flink.streaming.api.scala._
 
 import java.text.SimpleDateFormat
 import java.time.Duration
-import java.util.{Properties, TimeZone}
+import java.util.TimeZone
 
 
 object KillValue {
   def main(args: Array[String]): Unit = {
-    // TODO 配置传入方式需要修改
-    val properties = new Properties()
-    properties.setProperty("bootstrap.servers", "node1:33143,node2:33143,node3:33143")
-    //properties.setProperty("bootstrap.servers", "192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092")
-    properties.setProperty("group.id", "KillValue-test")
-    properties.setProperty("key.deserializer", classOf[StringSerializer].getName)
-    properties.setProperty("value.deserializer", classOf[StringSerializer].getName)
-
-    val consumer = new FlinkKafkaConsumer[String]("zkill", new SimpleStringSchema(), properties)
-    // TODO 设置消费方式
-    consumer.setStartFromEarliest()
-    //consumer.setStartFromGroupOffsets()
 
     val env = StreamExecutionEnvironment.getExecutionEnvironment
+
     // TODO 开启检查点
     //设置Checkpoint间隔
     //env.enableCheckpointing(1000)
     //Checkpoint之间的最小时间间隔
     //env.getCheckpointConfig.setMinPauseBetweenCheckpoints(500)
 
-    val zkillKafkaStream = env.addSource(consumer).setParallelism(3)
+    val kafkaConsumer = KafkaSource.GetKafkaSource()
+    val zkillKafkaStream = env.addSource(kafkaConsumer).setParallelism(3)
       //val zkillKafkaStream = env.socketTextStream("127.0.0.1", 1234)
       .assignTimestampsAndWatermarks(
         WatermarkStrategy.forBoundedOutOfOrderness[String](Duration.ofHours(1))

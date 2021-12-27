@@ -7,7 +7,8 @@ type System struct {
 	MysqlESA   Mysql  `mapstructure:"mysql-esa"`
 	MysqlBasic Mysql  `mapstructure:"mysql-basic"`
 	Redis      Redis  `mapstructure:"redis"`
-	Kafka      Kafka  `mapstructure:"kafka"`
+	KafkaIn    Kafka  `mapstructure:"kafka-in"`
+	KafkaOut   Kafka  `mapstructure:"kafka-out"`
 	Casbin     Casbin `mapstructure:"casbin"`
 	JWT        JWT    `mapstructure:"jwt"`
 }

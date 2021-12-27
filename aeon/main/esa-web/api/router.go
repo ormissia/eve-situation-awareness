@@ -16,8 +16,15 @@ func Routers() (r *gin.Engine) {
 	// TODO 限流
 	webApi := r.Group("/web")
 	webApi.Use(middleware.Cors())
+
+	eveBasicInfo := webApi.Group("/basic")
 	{
-		webApi.GET("/solar_system_kill", web.SearchSolarSystemKill)
+		eveBasicInfo.GET("/solar_system_fuzzy", web.SolarSystemFuzzySearch)
+	}
+
+	analysisApi := webApi.Group("/analysis")
+	{
+		analysisApi.GET("/solar_system_kill", web.SearchSolarSystemKill)
 	}
 
 	return r

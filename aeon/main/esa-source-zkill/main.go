@@ -41,11 +41,11 @@ var (
 func main() {
 	global.ESAViper = initialize.Viper(configFileName)
 	global.ESALog = initialize.Zap()
-	global.ESAKafka.Producer = initialize.KafkaProducer()
+	global.ESAKafkaIn.Producer = initialize.KafkaProducer()
 	// global.ESAMySql = initialize.Mysql()
 	// global.ESARedis = initialize.Redis()
 	defer func() {
-		if err := global.ESAKafka.Consumer.Close(); err != nil {
+		if err := global.ESAKafkaIn.Consumer.Close(); err != nil {
 			global.ESALog.Error("Kafka consumer close err", zap.String("err", err.Error()))
 		}
 	}()

@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import {Dropdown, Input, Menu} from "semantic-ui-react";
+import {Dropdown, Menu, Input} from "semantic-ui-react";
 import TabCalendar from "./TabCalendar";
 
+import {API_GET_SOLAR_SYSTEM_INFO_FUZZY} from "../utils/Api";
 import SSOImg from "../assets/eve-sso-login-black-large.png";
 
 const todayZero = new Date(new Date().setHours(0, 0, 0, 0))
@@ -17,6 +18,7 @@ export default class TabMenu extends Component {
     state = {
         activeItem: 'day',
         dateRange: defaultDateRange.get('day'),
+        solarSystems: [],
     }
 
     handleItemClick = (e, {name}) => {
@@ -24,7 +26,29 @@ export default class TabMenu extends Component {
         this.setState({dateRange: defaultDateRange.get(name)})
         const startTS = defaultDateRange.get(name)[0]
         const endTS = defaultDateRange.get(name)[1]
-        this.props.getTabMenuTimeType(name, startTS.valueOf(), endTS.valueOf())
+        this.props.getTabMenuTimeType(name, startTS.valueOf(), endTS.valueOf(), '')
+    }
+
+    handleInputChange = (e, input) => {
+        API_GET_SOLAR_SYSTEM_INFO_FUZZY().get(
+            '/solar_system_fuzzy?solar_system_name=' + input.value
+        ).then(response => {
+            const tempSolarSystems = [];
+            const res = response.data.data
+            console.log(res.length)
+            for (let i = 0; i < res.length; i++) {
+                console.log(res[i])
+                const tempSolarSystem = {
+                    key: res[i].solar_system_id,
+                    text: res[i].solar_system_name,
+                }
+                tempSolarSystems.push(tempSolarSystem)
+            }
+            this.setState({solarSystems: tempSolarSystems})
+        })
+        // const startTS = defaultDateRange.get(this.state.activeItem)[0]
+        // const endTS = defaultDateRange.get(this.state.activeItem)[1]
+        // this.props.getTabMenuTimeType(this.state.activeItem, startTS.valueOf(), endTS.valueOf(), solarSystemName)
     }
 
     getDateRange = (value) => {
@@ -70,7 +94,11 @@ export default class TabMenu extends Component {
                         />
                     </Menu.Item>
                     <Menu.Item>
-                        <Input icon='search' placeholder='Solar System'/>
+                        <Input
+                            icon='search'
+                            placeholder='Solar System'
+                            onChange={this.handleInputChange}
+                        />
                     </Menu.Item>
                     <Menu.Item>
                         <Dropdown text='Login'>

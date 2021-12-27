@@ -20,7 +20,8 @@ var (
 	ESAMySqlESA   *gorm.DB
 	ESAMySqlBasic *gorm.DB
 	ESARedis      *redis.Client
-	ESAKafka      *KafkaClient
+	ESAKafkaIn    *KafkaClient
+	ESAKafkaOut   *KafkaClient
 	// TODO
 	ESAElasticSearch string
 

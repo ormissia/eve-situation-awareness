@@ -14,8 +14,11 @@ var once sync.Once
 
 func init() {
 	once.Do(func() {
-		if global.ESAKafka == nil {
-			global.ESAKafka = new(global.KafkaClient)
+		if global.ESAKafkaIn == nil {
+			global.ESAKafkaIn = new(global.KafkaClient)
+		}
+		if global.ESAKafkaOut == nil {
+			global.ESAKafkaOut = new(global.KafkaClient)
 		}
 	})
 }
@@ -24,7 +27,7 @@ func KafkaConsumer() (consumer sarama.ConsumerGroup) {
 	config := sarama.NewConfig()
 	config.Version = sarama.V3_0_0_0
 
-	consumer, err := sarama.NewConsumerGroup(strings.Split(global.ESAConfig.Kafka.Path, ","), global.ESAConfig.Kafka.Group, config)
+	consumer, err := sarama.NewConsumerGroup(strings.Split(global.ESAConfig.KafkaOut.Path, ","), global.ESAConfig.KafkaOut.Group, config)
 	if err != nil {
 		global.ESALog.Error("Kafka consumer init err", zap.String("err", err.Error()))
 	}
@@ -49,13 +52,13 @@ func KafkaProducer() (producer sarama.AsyncProducer) {
 	config.Producer.Return.Successes = true
 	config.Producer.Return.Errors = true
 	// 设置用户名密码
-	if global.ESAConfig.Kafka.Username != "" && global.ESAConfig.Kafka.Password != "" {
+	if global.ESAConfig.KafkaIn.Username != "" && global.ESAConfig.KafkaIn.Password != "" {
 		config.Net.SASL.Enable = true
-		config.Net.SASL.User = global.ESAConfig.Kafka.Username
-		config.Net.SASL.Password = global.ESAConfig.Kafka.Password
+		config.Net.SASL.User = global.ESAConfig.KafkaIn.Username
+		config.Net.SASL.Password = global.ESAConfig.KafkaIn.Password
 	}
 
-	bootstrapServers := strings.Split(global.ESAConfig.Kafka.Path, ",")
+	bootstrapServers := strings.Split(global.ESAConfig.KafkaIn.Path, ",")
 	producer, err := sarama.NewAsyncProducer(bootstrapServers, config)
 	if err != nil {
 		global.ESALog.Error("Kafka producer init err", zap.String("err", err.Error()))

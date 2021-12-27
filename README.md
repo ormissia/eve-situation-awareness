@@ -12,5 +12,12 @@
 
 ---
 
+## Framework
+
+![framework](docs/framework.drawio.png)
+
+## Dataflow
+
+![dataflow](docs/dataflow.drawio.png)
 
 ---

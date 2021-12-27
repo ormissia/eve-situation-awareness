@@ -22,7 +22,7 @@ var (
 
 func Factory(storageType string) (storage Storage, err error) {
 	if storageType == KafkaStorage {
-		return &Kafka{producer: global.ESAKafka.Producer}, nil
+		return &Kafka{producer: global.ESAKafkaIn.Producer}, nil
 	} else {
 		global.ESALog.Info("create storage failed", zap.Any("err", TypeErr))
 		return nil, TypeErr
