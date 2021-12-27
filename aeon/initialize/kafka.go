@@ -118,21 +118,5 @@ func KafkaProducer() (producer sarama.AsyncProducer) {
 		return nil
 	}
 
-	go func(producer sarama.AsyncProducer) {
-		global.ESALog.Info("start monitor kafka producer status...")
-		for {
-			select {
-			case success, ok := <-producer.Successes():
-				if ok {
-					global.ESALog.Info("Kafka producer success", zap.Any("msg", success))
-				}
-			case errors, ok := <-producer.Errors():
-				if ok {
-					global.ESALog.Error("Kafka producer err", zap.Any("err", errors))
-				}
-			}
-		}
-	}(producer)
-
 	return producer
 }

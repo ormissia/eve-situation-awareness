@@ -34,8 +34,22 @@ func (k *Kafka) Save(msg []byte) {
 		Timestamp: time.Now(),
 	}
 
-	// TODO 观察是否需要序列化之后再发kafka
-	global.ESAKafka.Producer.Input() <- kafkaMsg
+	for {
+		// TODO 观察是否需要序列化之后再发kafka
+		global.ESAKafka.Producer.Input() <- kafkaMsg
+		global.ESALog.Info("start monitor kafka producer status...")
+		select {
+		case success, ok := <-global.ESAKafka.Producer.Successes():
+			if ok {
+				global.ESALog.Info("Kafka producer success", zap.Any("msg", success))
+				break
+			}
+		case errors, ok := <-global.ESAKafka.Producer.Errors():
+			if ok {
+				global.ESALog.Error("Kafka producer err", zap.Any("err", errors))
+			}
+		}
+	}
 }
 
 func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {
