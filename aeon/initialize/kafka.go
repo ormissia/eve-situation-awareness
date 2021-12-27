@@ -14,11 +14,8 @@ var once sync.Once
 
 func init() {
 	once.Do(func() {
-		if global.ESAKafkaIn == nil {
-			global.ESAKafkaIn = new(global.KafkaClient)
-		}
-		if global.ESAKafkaOut == nil {
-			global.ESAKafkaOut = new(global.KafkaClient)
+		if global.ESAKafka == nil {
+			global.ESAKafka = new(global.KafkaClient)
 		}
 	})
 }

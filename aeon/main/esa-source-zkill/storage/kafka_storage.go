@@ -35,7 +35,7 @@ func (k *Kafka) Save(msg []byte) {
 	}
 
 	// TODO 观察是否需要序列化之后再发kafka
-	global.ESAKafkaIn.Producer.Input() <- kafkaMsg
+	global.ESAKafka.Producer.Input() <- kafkaMsg
 }
 
 func convertKafkaMsgStr(msg []byte) (kafkaMsgStr string) {

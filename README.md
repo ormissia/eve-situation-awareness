@@ -1,4 +1,4 @@
-# eve-situation-awareness
+# EVE Situation Awareness
 
 ---
 
