@@ -5,6 +5,7 @@ import (
 
 	"aeon/global"
 	"aeon/initialize"
+	"aeon/main/esa-kafka-transfer/transfer"
 )
 
 //go:embed config.yaml
@@ -25,8 +26,8 @@ func main() {
 	global.ESAKafka.Producer = initialize.KafkaProducer()
 	// global.ESAMySql = initialize.Mysql()
 	// global.ESARedis = initialize.Redis()
-	consumer := &ZkillConsumer{
-		ready: make(chan bool),
-	}
+	consumer := new(transfer.ZkillConsumer)
+	bc := make(chan bool)
+	consumer.SetReady(&bc)
 	initialize.KafkaConsume(consumer)
 }
