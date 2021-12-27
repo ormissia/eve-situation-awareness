@@ -44,11 +44,6 @@ func main() {
 	global.ESAKafka.Producer = initialize.KafkaProducer()
 	// global.ESAMySql = initialize.Mysql()
 	// global.ESARedis = initialize.Redis()
-	defer func() {
-		if err := global.ESAKafka.Consumer.Close(); err != nil {
-			global.ESALog.Error("Kafka consumer close err", zap.String("err", err.Error()))
-		}
-	}()
 
 	storageClient = make([]storage.Storage, 0)
 	if len(os.Args) == 1 {

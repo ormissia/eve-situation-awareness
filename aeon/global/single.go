@@ -14,15 +14,14 @@ import (
 )
 
 var (
-	ESAConfig     config.System
-	ESAViper      *viper.Viper
-	ESALog        *zap.Logger
-	ESAMySqlESA   *gorm.DB
-	ESAMySqlBasic *gorm.DB
-	ESARedis      *redis.Client
-	ESAKafka      *KafkaClient
-	// TODO
-	ESAElasticSearch string
+	ESAConfig        config.System
+	ESAViper         *viper.Viper
+	ESALog           *zap.Logger
+	ESAMySqlESA      *gorm.DB
+	ESAMySqlBasic    *gorm.DB
+	ESARedis         *redis.Client
+	ESAKafka         *KafkaClient
+	ESAElasticSearch string // TODO
 
 	ESAStaticFile embed.FS
 
@@ -31,5 +30,4 @@ var (
 
 type KafkaClient struct {
 	Producer sarama.AsyncProducer
-	Consumer sarama.ConsumerGroup
 }

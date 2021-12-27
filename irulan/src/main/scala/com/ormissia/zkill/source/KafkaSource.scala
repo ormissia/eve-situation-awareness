@@ -10,8 +10,7 @@ object KafkaSource {
   def GetKafkaSource(): FlinkKafkaConsumerBase[String] = {
     // TODO 配置传入方式需要修改
     val properties = new Properties()
-    properties.setProperty("bootstrap.servers", "node1:33143,node2:33143,node3:33143")
-    //properties.setProperty("bootstrap.servers", "192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092")
+    properties.setProperty("bootstrap.servers", "192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092")
     properties.setProperty("group.id", "KillValue-test")
     properties.setProperty("key.deserializer", classOf[StringSerializer].getName)
     properties.setProperty("value.deserializer", classOf[StringSerializer].getName)

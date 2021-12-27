@@ -1,8 +1,14 @@
 package initialize
 
 import (
+	"context"
+	"log"
+	"os"
+	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
+	"time"
 
 	"github.com/Shopify/sarama"
 	"go.uber.org/zap"
@@ -20,13 +26,63 @@ func init() {
 	})
 }
 
-func KafkaConsumer() (consumer sarama.ConsumerGroup) {
+type Consumer interface {
+	sarama.ConsumerGroupHandler
+	SetReady(*chan bool)
+	GetReady() *chan bool
+}
+
+func KafkaConsume(consumer Consumer) {
 	config := sarama.NewConfig()
 	config.Version = sarama.V3_0_0_0
+	config.Consumer.Return.Errors = true
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
+	config.Consumer.Offsets.AutoCommit.Enable = true
+	config.Consumer.Offsets.AutoCommit.Interval = time.Second
+	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRoundRobin
 
-	consumer, err := sarama.NewConsumerGroup(strings.Split(global.ESAConfig.KafkaOut.Path, ","), global.ESAConfig.KafkaOut.Group, config)
+	client, err := sarama.NewConsumerGroup(strings.Split(global.ESAConfig.KafkaOut.Path, ","), global.ESAConfig.KafkaOut.Group, config)
 	if err != nil {
 		global.ESALog.Error("Kafka consumer init err", zap.String("err", err.Error()))
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+		for {
+			// `Consume` should be called inside an infinite loop, when a
+			// server-side rebalance happens, the consumer session will need to be
+			// recreated to get the new claims
+			if err := client.Consume(ctx, strings.Split(global.ESAConfig.KafkaOut.Topic, ","), consumer); err != nil {
+				log.Panicf("Error from consumer: %v", err)
+			}
+			// check if context was cancelled, signaling that the consumer should stop
+			if ctx.Err() != nil {
+				return
+			}
+			cb := make(chan bool)
+			consumer.SetReady(&cb)
+		}
+	}()
+
+	<-*consumer.GetReady() // Await till the consumer has been set up
+	global.ESALog.Info("Sarama consumer up and running!...")
+
+	sigterm := make(chan os.Signal, 1)
+	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	select {
+	case <-ctx.Done():
+		global.ESALog.Info("terminating: context cancelled")
+	case <-sigterm:
+		global.ESALog.Info("terminating: via signal")
+	}
+	cancel()
+	wg.Wait()
+	if err = client.Close(); err != nil {
+		global.ESALog.Error("Error closing client", zap.Any("err", err))
 	}
 
 	return
