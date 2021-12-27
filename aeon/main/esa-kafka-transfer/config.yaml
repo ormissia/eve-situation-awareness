@@ -37,7 +37,7 @@ kafka-out:
   group: source
 
 kafka-in:
-  path: kafka-local1:9092,kafka-local2:9092,kafka-local3:9092
+  path: bigdata7:9092,bigdata8:9092,bigdata9:9092
   username:
   password:
   topic: zkill
