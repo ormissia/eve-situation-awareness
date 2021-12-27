@@ -39,22 +39,23 @@ func (z *ZkillConsumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim 
 	// Do not move the code below to a goroutine.
 	// The `ConsumeClaim` itself is called within a goroutine, see:
 	// https://github.com/Shopify/sarama/blob/main/consumer_group.go#L27-L29
+NewMsg:
 	for message := range claim.Messages() {
 		global.ESALog.Info("Message claimed: ", zap.Any("timestamp", message.Timestamp), zap.Any("topic", message.Topic), zap.Any("value", string(message.Value)))
 
+		kafkaMsg := &sarama.ProducerMessage{
+			Topic:     global.ESAConfig.KafkaIn.Topic,
+			Value:     sarama.ByteEncoder(message.Value),
+			Timestamp: time.Now(),
+		}
 		for {
-			kafkaMsg := &sarama.ProducerMessage{
-				Topic:     global.ESAConfig.KafkaIn.Topic,
-				Value:     sarama.ByteEncoder(message.Value),
-				Timestamp: time.Now(),
-			}
 			global.ESAKafka.Producer.Input() <- kafkaMsg
 			select {
 			case success, ok := <-global.ESAKafka.Producer.Successes():
 				if ok {
 					global.ESALog.Info("Kafka producer success", zap.Any("msg", success))
 					session.MarkMessage(message, "")
-					break
+					goto NewMsg
 				}
 			case errors, ok := <-global.ESAKafka.Producer.Errors():
 				if ok {

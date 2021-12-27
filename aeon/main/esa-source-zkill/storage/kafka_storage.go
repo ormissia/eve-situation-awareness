@@ -42,7 +42,7 @@ func (k *Kafka) Save(msg []byte) {
 		case success, ok := <-global.ESAKafka.Producer.Successes():
 			if ok {
 				global.ESALog.Info("Kafka producer success", zap.Any("msg", success))
-				break
+				return
 			}
 		case errors, ok := <-global.ESAKafka.Producer.Errors():
 			if ok {
