@@ -1,0 +1,4 @@
+GET http://localhost:8080/web/basic/solar_system_fuzzy?solar_system_name=
+Accept: application/json
+
+###

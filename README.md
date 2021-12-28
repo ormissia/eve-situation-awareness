@@ -27,7 +27,7 @@
 
 ![Kafka](https://img.shields.io/badge/Kafka-component-grey?labelColor=black&style=for-the-badge&logo=ApacheKafka)
 ![MySQL](https://img.shields.io/badge/MySQL-component-grey?labelColor=F5F5F5&style=for-the-badge&logo=MySQL)
-![Redis](https://img.shields.io/badge/HBase-component-grey?labelColor=A9A9A9&style=for-the-badge&logo=Redis)
+![Redis](https://img.shields.io/badge/Redis-component-grey?labelColor=A9A9A9&style=for-the-badge&logo=Redis)
 ![HBase](https://img.shields.io/badge/HBase-component-grey?labelColor=8B4513&style=for-the-badge&logo=ApacheHadoop)
 ![Elastic](https://img.shields.io/badge/Elastic-component-grey?labelColor=6B8E23&style=for-the-badge&logo=Elastic)
 

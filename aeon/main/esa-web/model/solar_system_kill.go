@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"gorm.io/gorm"
+
 	"aeon/global"
 	"aeon/utils"
 )
@@ -19,6 +21,15 @@ type SolarSystemKill struct {
 
 func (SolarSystemKill) TableName() string {
 	return "solar_system_kill_statistical"
+}
+
+func (s *SolarSystemKill) AfterFind(tx *gorm.DB) (err error) {
+	// solarSystemInfo := eve_basic.SolarSystem{SolarSystemID: s.SolarSystemId}
+	// if err = solarSystemInfo.SelectInfoById(); err != nil {
+	// 	return err
+	// }
+	// s.SolarSystem = solarSystemInfo.SolarSystemName
+	return
 }
 
 func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSystemKill, err error) {
