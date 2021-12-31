@@ -25,6 +25,7 @@ func Routers() (r *gin.Engine) {
 	analysisApi := webApi.Group("/analysis")
 	{
 		analysisApi.GET("/solar_system_kill", web.SearchSolarSystemKill)
+		analysisApi.GET("/solar_system_kill_order", web.SearchSolarSystemKillOrder)
 	}
 
 	return r

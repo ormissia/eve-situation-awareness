@@ -16,6 +16,8 @@ type BaseParams struct {
 	StartTimeStamp int64  `json:"start_time_stamp" form:"start_time_stamp"`
 	EndTimeStamp   int64  `json:"end_time_stamp" form:"end_time_stamp"`
 	TimeType       string `json:"time_type" form:"time_type"`
+	OrderField     string `json:"order_field" form:"order_field"`
+	OrderType      string `json:"order_type" form:"order_type"`
 }
 
 type ChartFormatData struct {

@@ -92,3 +92,43 @@ func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSy
 
 	return
 }
+
+func (s *SolarSystemKill) SelectSolarSystemSum(params BaseParams) (result []SolarSystemKill, err error) {
+	db := global.ESAMySqlESA.Model(s)
+
+	if params.StartTimeStamp != 0 {
+		start := time.UnixMilli(params.StartTimeStamp)
+		startStr := start.Format(utils.DTTimeFormat)
+		db.Where("dt >= ?", startStr)
+	}
+
+	if params.EndTimeStamp != 0 {
+		end := time.UnixMilli(params.EndTimeStamp)
+		endStr := end.Format(utils.DTTimeFormat)
+		db.Where("dt <= ?", endStr)
+	}
+
+	orderField := ""
+	orderType := ""
+
+	if params.OrderField == "kill_value" {
+		orderField = params.OrderField
+	} else if params.OrderField == "kill_quantity" {
+		orderField = params.OrderField
+	}
+	if params.OrderType == "" || params.OrderType == "asc" {
+		orderType = params.OrderType
+	} else if params.OrderType == "desc" {
+		orderType = params.OrderType
+	}
+
+	db.Order(orderField + " " + orderType)
+
+	db.Group("solar_system_id")
+
+	db.Limit(10)
+
+	err = db.Select("solar_system_id, sum(kill_quantity) as kill_quantity, sum(kill_value) as kill_value").
+		Scan(&result).Error
+	return
+}

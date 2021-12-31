@@ -2,3 +2,12 @@ GET http://localhost:8080/web/analysis/solar_system_kill?time_type=day&start_tim
 Accept: application/json
 
 ###
+
+GET http://localhost:8080/web/analysis/solar_system_kill_order?time_type=day&start_time_stamp=1637913001994&end_time_stamp=&order_field=kill_quantity&order_type=desc
+Accept: application/json
+
+###
+GET http://localhost:8080/web/analysis/solar_system_kill_order?time_type=day&start_time_stamp=1637913001994&end_time_stamp=&order_field=kill_value&order_type=desc
+Accept: application/json
+
+###
