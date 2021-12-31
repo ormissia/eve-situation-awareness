@@ -27,7 +27,7 @@ class MySQLSink[T](classType: Class[_ <: T]) extends RichSinkFunction[T] {
   }
 
   override def open(parameters: Configuration): Unit = {
-    conn = DriverManager.getConnection("jdbc:mysql://localhost/eve_situation_awareness", "root", "123")
+    conn = DriverManager.getConnection("jdbc:mysql://192.168.13.100:3306/eve_situation_awareness", "root", "123456")
     // TODO 判断方法需要修改
     if (classType.getName.equals(classOf[SolarSystemSink].getName)) {
       pst = conn.prepareStatement("insert into solar_system_kill_statistical (dt, solar_system_id, kill_quantity, kill_value, create_time) values (?, ?, ?, ?, now()) on duplicate key update kill_quantity = ?, kill_value= ?")

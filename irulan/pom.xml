@@ -15,6 +15,7 @@
         <flink-version>1.13.4</flink-version>
         <scala-version>2.12.15</scala-version>
         <hadoop-version>3.2.2</hadoop-version>
+        <hbase-version>2.4.9</hbase-version>
         <jedis-version>3.7.0</jedis-version>
         <mysql-version>8.0.27</mysql-version>
         <mybatis-version>3.5.8</mybatis-version>

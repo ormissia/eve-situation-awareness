@@ -1,5 +1,6 @@
 package com.ormissia.zkill.utils
 
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 // 0         1      2    3    4   5           6        7      8         9
@@ -58,6 +59,25 @@ case class SolarSystemSink(
                             killValue: Double,
                             dt: String,
                           )
+
+case class Attacker(
+                     characterId: Int,
+                     killQuantity: Int,
+                     shipTypeId: Int,
+                     solarSystem: Int,
+                     killValue: Double,
+                   )
+
+case class CharacterSink(
+                          characterId: Int,
+                          killQuantity: Int,
+                          killValue: Double,
+                          mostShipType: String,
+                          mostSolarSystem: String,
+                          labels: String,
+                          shipTypes: mutable.HashMap[String,Int],
+                          solarSystems: mutable.HashMap[String,Int],
+                        )
 
 object GlobalConstants {
 
