@@ -1,11 +1,11 @@
 package service
 
 import (
-	"aeon/main/esa-web/model/eve_basic"
+	"aeon/main/esa-web/model/evebasic"
 )
 
 func InitSolarSystemRedisCache() (err error) {
-	solarSystems, err := new(eve_basic.SolarSystem).SelectSolarSystem()
+	solarSystems, err := new(evebasic.SolarSystem).SelectSolarSystem()
 	if err != nil {
 		return err
 	}

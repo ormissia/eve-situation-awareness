@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 
-	v1 "aeon/main/esa-web/api/v1"
+	"aeon/main/esa-web/api/v1"
 	"aeon/main/esa-web/api/web"
 	"aeon/main/esa-web/middleware"
 )

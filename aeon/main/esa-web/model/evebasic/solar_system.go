@@ -1,4 +1,4 @@
-package eve_basic
+package evebasic
 
 import (
 	"context"

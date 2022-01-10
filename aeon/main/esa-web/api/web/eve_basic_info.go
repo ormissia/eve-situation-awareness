@@ -6,12 +6,12 @@ import (
 
 	"aeon/global"
 	"aeon/main/esa-web/model"
-	"aeon/main/esa-web/model/eve_basic"
+	"aeon/main/esa-web/model/evebasic"
 	"aeon/utils"
 )
 
 func SolarSystemFuzzySearch(c *gin.Context) {
-	var solarSystem eve_basic.SolarSystem
+	var solarSystem evebasic.SolarSystem
 	if err := c.ShouldBind(&solarSystem); err != nil {
 		global.ESALog.Error("param should bind BaseParams err", zap.Any("err", err))
 		model.ErrorResponse(c, utils.ErrCodeMissingParamError)
@@ -21,7 +21,7 @@ func SolarSystemFuzzySearch(c *gin.Context) {
 	global.ESALog.Info("params", zap.Any("SolarSystem", solarSystem))
 
 	if len(solarSystem.SolarSystemName) <= 1 {
-		model.SuccessResponse(c, []eve_basic.SolarSystem{})
+		model.SuccessResponse(c, []evebasic.SolarSystem{})
 		return
 	}
 

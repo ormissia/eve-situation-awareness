@@ -5,7 +5,6 @@ import com.ormissia.zkill.source.KafkaSource
 import com.ormissia.zkill.transformation.KafkaLineToZKillInfo
 import com.ormissia.zkill.utils.{ESAConst, SolarSystemSink, ZKillInfo}
 import org.apache.flink.api.common.functions.AggregateFunction
-import org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.environment.CheckpointConfig
 import org.apache.flink.streaming.api.scala.function.WindowFunction
@@ -25,11 +24,12 @@ object SolarSystemKillAnalyzer {
 
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
+
     env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
     // 设置Checkpoint间隔
-    env.enableCheckpointing(1000)
+    env.enableCheckpointing(60 * 1000)
     //Checkpoint之间的最小时间间隔
-    env.getCheckpointConfig.setMinPauseBetweenCheckpoints(500)
+    env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
     env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
     // RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
     env.getCheckpointConfig.enableExternalizedCheckpoints(

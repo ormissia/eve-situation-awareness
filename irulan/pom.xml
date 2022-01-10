@@ -12,7 +12,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <sel4j-version>2.0.0-alpha5</sel4j-version>
-        <flink-version>1.13.4</flink-version>
+        <flink-version>1.13.3</flink-version>
         <scala-version>2.12.15</scala-version>
         <hadoop-version>3.2.2</hadoop-version>
         <hbase-version>2.4.9</hbase-version>
