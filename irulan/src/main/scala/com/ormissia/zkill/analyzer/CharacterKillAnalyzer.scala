@@ -5,11 +5,10 @@ import com.ormissia.zkill.source.KafkaSource
 import com.ormissia.zkill.transformation.KafkaLineToZKillInfo
 import com.ormissia.zkill.utils.{Attacker, CharacterSink, ESAConst}
 import org.apache.flink.api.common.functions.AggregateFunction
-import org.apache.flink.api.common.state.MapState
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.environment.CheckpointConfig
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.api.scala.function.{ProcessAllWindowFunction, WindowFunction}
+import org.apache.flink.streaming.api.scala.function.WindowFunction
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow

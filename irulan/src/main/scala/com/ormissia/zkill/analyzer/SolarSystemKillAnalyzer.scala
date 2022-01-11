@@ -47,7 +47,7 @@ object SolarSystemKillAnalyzer {
           Time.hours(1),
           Time.minutes(10)
         ))
-      // 在这里允许延迟数据重新计算会导致结果错误
+      // 在这里允许延迟数据重新计算会导致结果错误，延迟数据全部使用侧输出流处理
       //.allowedLateness(Time.hours(2))
       // 延迟严重的数据到侧输出流
       .sideOutputLateData(KafkaSource.LATE_DATE_TAG_ZKILL_INFO)

@@ -25,8 +25,6 @@ func SolarSystemFuzzySearch(c *gin.Context) {
 		return
 	}
 
-	// TODO 星系名称大小写
-
 	solarSystems, err := solarSystem.SelectSolarSystem()
 	if err != nil {
 		global.ESALog.Error("select mysql err", zap.Any("err", err))
