@@ -1,13 +1,10 @@
-import {
-    Header,
-    Container,
-    Segment,
-} from 'semantic-ui-react'
 import React, {Component} from "react";
+import {Layout, Button, Menu,Typography} from 'antd';
 
-import TabMenu from "../components/TabMenu";
-import Chart from "../components/Chart";
 import {API_GET_SOLAR_SYSTEM_KILL} from "../utils/Api";
+
+const {Header, Footer, Content} = Layout;
+const { Title } = Typography;
 
 const style = {
     h1: {
@@ -106,17 +103,24 @@ class Homepage extends Component {
 
     render() {
         return (
-            <div>
-                <Container>
-                    <TabMenu getTabMenuTimeType={this.getTabMenuTimeType}/>
-
-                    <Header as='h1' content='EVE Situation Awareness' style={style.h1} textAlign='center'/>
-
-                    <Segment>
-                        <Chart chartOption={this.state.chartOption}/>
-                    </Segment>
-                </Container>
-            </div>
+            <Layout style={{background: 'white'}}>
+                <Header style={{position: 'fixed', zIndex: 1, width: '100%', background: 'whitesmoke'}}>
+                    <Menu mode="horizontal" defaultSelectedKeys={['2']}>
+                        {new Array(6).fill(null).map((_, index) => {
+                            const key = index + 1;
+                            return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>;
+                        })}
+                    </Menu>
+                </Header>
+                <Content className="site-layout" style={{padding: '0 50px', marginTop: 64}}>
+                    <div style={{heigh: '10000px', color: 'red'}}>
+                        <Button type="primary">Button</Button>
+                    </div>
+                </Content>
+                <Footer style={{background: 'whitesmoke'}}>
+                    foooooot
+                </Footer>
+            </Layout>
         )
     }
 }
