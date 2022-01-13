@@ -41,6 +41,6 @@ mysql-basic:
 
 # redis configuration
 redis:
-  path: 127.0.0.1:6379
+  path: redis:6379
   password:
   db: 0
