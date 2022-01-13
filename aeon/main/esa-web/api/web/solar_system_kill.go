@@ -69,7 +69,7 @@ func SearchSolarSystemKillOrder(c *gin.Context) {
 	}
 
 	var result model.ChartFormatData
-	err = result.Convert("solar_system_id", []string{param.OrderField, "solar_system"}, solarSystemKills)
+	err = result.Convert("solar_system_name", []string{param.OrderField, "solar_system_id"}, solarSystemKills)
 	if err != nil {
 		global.ESALog.Error("convert chart format data err", zap.Any("err", err))
 		model.ErrorResponse(c, utils.ErrServerError)

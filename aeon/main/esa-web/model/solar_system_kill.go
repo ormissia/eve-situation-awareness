@@ -4,19 +4,21 @@ import (
 	"fmt"
 	"time"
 
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 
 	"aeon/global"
+	"aeon/main/esa-web/model/evebasic"
 	"aeon/utils"
 )
 
 type SolarSystemKill struct {
-	SolarSystemId int64  `json:"solar_system_id" form:"solar_system_id" gorm:"column:solar_system_id"`
-	KillQuantity  int64  `json:"kill_quantity" form:"kill_quantity" gorm:"column:kill_quantity"`
-	KillValue     int64  `json:"kill_value" form:"kill_value" gorm:"column:kill_value"`
-	Dt            string `json:"dt" form:"dt" gorm:"column:dt"`
-	SolarSystem   string `json:"solar_system" form:"-" gorm:"-"`
-	CreateTime    string `json:"create_time" form:"create_time" gorm:"column:create_time"`
+	SolarSystemId   int64  `json:"solar_system_id" form:"solar_system_id" gorm:"column:solar_system_id"`
+	KillQuantity    int64  `json:"kill_quantity" form:"kill_quantity" gorm:"column:kill_quantity"`
+	KillValue       int64  `json:"kill_value" form:"kill_value" gorm:"column:kill_value"`
+	Dt              string `json:"dt" form:"dt" gorm:"column:dt"`
+	SolarSystemName string `json:"solar_system_name" form:"-" gorm:"-"`
+	CreateTime      string `json:"create_time" form:"create_time" gorm:"column:create_time"`
 }
 
 func (SolarSystemKill) TableName() string {
@@ -24,11 +26,12 @@ func (SolarSystemKill) TableName() string {
 }
 
 func (s *SolarSystemKill) AfterFind(tx *gorm.DB) (err error) {
-	// solarSystemInfo := eve_basic.SolarSystem{SolarSystemID: s.SolarSystemId}
-	// if err = solarSystemInfo.SelectInfoById(); err != nil {
-	// 	return err
-	// }
-	// s.SolarSystem = solarSystemInfo.SolarSystemName
+	ss := new(evebasic.SolarSystem)
+	ss.SolarSystemID = s.SolarSystemId
+	if err = ss.SelectInfoById(); err != nil {
+		global.ESALog.Error("find solar system from cache err", zap.Any("err", err))
+	}
+	s.SolarSystemName = ss.SolarSystemName
 	return
 }
 
@@ -129,6 +132,6 @@ func (s *SolarSystemKill) SelectSolarSystemSum(params BaseParams) (result []Sola
 	db.Limit(10)
 
 	err = db.Select("solar_system_id, sum(kill_quantity) as kill_quantity, sum(kill_value) as kill_value").
-		Scan(&result).Error
+		Find(&result).Error
 	return
 }
