@@ -1,8 +1,10 @@
 import {Row, Col} from 'antd';
 import {Component} from "react";
-import {API_GET_SOLAR_SYSTEM_KILL} from "../utils/Api";
 
 import Chart from "./Chart";
+
+import {API_GET_SOLAR_SYSTEM_KILL} from "../utils/Api";
+import {BigNumFormat} from "../utils/Utils";
 
 class HomepageContent extends Component {
     state = {
@@ -29,6 +31,9 @@ class HomepageContent extends Component {
                     type: 'value',
                     name: 'kill value',
                     splitNumber: 5, //设置坐标轴的分割段数
+                    axisLabel: {
+                        formatter: BigNumFormat,
+                    },
                 }
             ],
             series: [
@@ -47,34 +52,6 @@ class HomepageContent extends Component {
                 }
             ]
         },
-        killQuantityTopNChartOption: {
-            color: ['#B0C4DE', '#191970'],
-            title: {
-                text: '击杀价值TopN',
-                left: 'center',
-                bottom: '0',
-            },
-            tooltip: {},
-            xAxis: {
-                data: []
-            },
-            yAxis: [
-                {
-                    splitLine: {show: false},
-                    type: 'value',
-                    name: 'kill value',
-                    splitNumber: 5, //设置坐标轴的分割段数
-                },
-            ],
-            series: [
-                {
-                    name: 'kill value',
-                    type: 'bar',
-                    yAxisIndex: 0,
-                    data: []
-                },
-            ]
-        },
         killValueTopNChartOption: {
             color: ['#B0C4DE', '#191970'],
             title: {
@@ -91,6 +68,37 @@ class HomepageContent extends Component {
                     splitLine: {show: false},
                     type: 'value',
                     name: 'kill value',
+                    splitNumber: 5, //设置坐标轴的分割段数
+                    axisLabel: {
+                        formatter: BigNumFormat,
+                    },
+                },
+            ],
+            series: [
+                {
+                    name: 'kill value',
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    data: []
+                },
+            ]
+        },
+        killQuantityTopNChartOption: {
+            color: ['#B0C4DE', '#191970'],
+            title: {
+                text: '击杀数量TopN',
+                left: 'center',
+                bottom: '0',
+            },
+            tooltip: {},
+            xAxis: {
+                data: []
+            },
+            yAxis: [
+                {
+                    splitLine: {show: false},
+                    type: 'value',
+                    name: 'kill quantity',
                     splitNumber: 5, //设置坐标轴的分割段数
                 },
             ],
@@ -130,7 +138,7 @@ class HomepageContent extends Component {
                 console.log(response.data.data)
                 const initOption = {
                     xAxis: {
-                        data: response.data.data.X
+                        data: response.data.data.X,
                     },
                     series: [
                         {
@@ -164,23 +172,27 @@ class HomepageContent extends Component {
                 console.log(response.data.data)
                 const initOption = {
                     xAxis: {
-                        data: response.data.data.X
+                        data: response.data.data.X,
+                        axisLabel: {
+                            interval: 0,
+                            rotate: 30,
+                        },
                     },
                     series: [
                         {
                             name: order_field,
                             type: 'bar',
                             yAxisIndex: 0,
-                            data: (order_field === 'kill_quantity') ? response.data.data.Y.kill_quantity : response.data.data.Y.kill_value
+                            data: (order_field === 'kill_quantity') ? response.data.data.Y.kill_quantity : response.data.data.Y.kill_value,
                         }
                     ]
                 }
                 if (order_field === 'kill_quantity') {
-                    const newOption = Object.assign(this.state.killValueTopNChartOption, initOption)
-                    this.setState({killValueTopNChartOption: newOption})
-                } else if (order_field === 'kill_value') {
                     const newOption = Object.assign(this.state.killQuantityTopNChartOption, initOption)
                     this.setState({killQuantityTopNChartOption: newOption})
+                } else if (order_field === 'kill_value') {
+                    const newOption = Object.assign(this.state.killValueTopNChartOption, initOption)
+                    this.setState({killValueTopNChartOption: newOption})
                 }
             })
     }
