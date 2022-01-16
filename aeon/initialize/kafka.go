@@ -36,7 +36,7 @@ func KafkaConsume(consumer Consumer) {
 	config := sarama.NewConfig()
 	config.Version = sarama.V3_0_0_0
 	config.Consumer.Return.Errors = true
-	config.Consumer.Offsets.Initial = sarama.OffsetNewest
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 	config.Consumer.Offsets.AutoCommit.Enable = true
 	config.Consumer.Offsets.AutoCommit.Interval = time.Second
 	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRoundRobin
