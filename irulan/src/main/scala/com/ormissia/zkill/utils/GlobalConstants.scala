@@ -71,7 +71,7 @@ case class Attacker(
                      labels: List[(String, Int)],
                    )
 
-case class CharacterSink(
+case class CharacterSinkFront(
                           characterId: Int,
                           finalShoot: Int,
                           killQuantity: Int,
@@ -82,6 +82,14 @@ case class CharacterSink(
                           solarSystems: List[(Int, Int)],
                         )
 
-object GlobalConstants {
+case class CharacterSink(
+                               characterId: Int,
+                               finalShoot: Int,
+                               killQuantity: Int,
+                               killValue: Double,
+                               dt: String,
+                               labels: String,
+                               shipTypes:String,
+                               solarSystems: String,
+                             )
 
-}

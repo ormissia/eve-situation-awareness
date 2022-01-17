@@ -5,6 +5,7 @@ import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, Wat
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 
 import java.time.Duration
@@ -18,17 +19,20 @@ object KafkaSource {
   def GetZKillInfoStream(env: StreamExecutionEnvironment, groupName: String): DataStream[String] = {
     // TODO 配置传入方式需要修改
     val properties = new Properties()
-    properties.setProperty("bootstrap.servers", "192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092")
+    properties.setProperty("bootstrap.servers", "node1:33143,node2:33143,node3:33143")
+    //properties.setProperty("bootstrap.servers", "192.168.13.107:9092,192.168.13.108:9092,192.168.13.109:9092")
     properties.setProperty("group.id", groupName)
     properties.setProperty("key.deserializer", classOf[StringSerializer].getName)
     properties.setProperty("value.deserializer", classOf[StringSerializer].getName)
+    properties.setProperty("auto.offset.reset", "earliest")
+    //properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
     val consumer = new FlinkKafkaConsumer[String]("zkill", new SimpleStringSchema(), properties)
     //consumer.setStartFromEarliest()
     consumer.setStartFromGroupOffsets()
 
     val zkillKafkaStream = env.addSource(consumer).setParallelism(3)
-      //val zkillKafkaStream = env.socketTextStream("127.0.0.1", 1234)
+    //val zkillKafkaStream = env.socketTextStream("127.0.0.1", 1234)
       .assignTimestampsAndWatermarks(
         WatermarkStrategy.forBoundedOutOfOrderness[String](Duration.ofHours(1))
           .withTimestampAssigner(new SerializableTimestampAssigner[String] {
@@ -38,7 +42,7 @@ object KafkaSource {
           })
       )
 
-    zkillKafkaStream.name("Kafka Source line string")
+    zkillKafkaStream.name("KafkaSourceLineString")
       .filter(_.split(" ").length >= 8).setParallelism(3)
   }
 }

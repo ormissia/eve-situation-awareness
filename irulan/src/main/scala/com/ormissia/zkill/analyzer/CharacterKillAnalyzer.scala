@@ -3,7 +3,7 @@ package com.ormissia.zkill.analyzer
 import com.ormissia.zkill.sink.MySQLSink
 import com.ormissia.zkill.source.KafkaSource
 import com.ormissia.zkill.transformation.KafkaLineToZKillInfo
-import com.ormissia.zkill.utils.{Attacker, CharacterSink, ESAConst}
+import com.ormissia.zkill.utils.{Attacker, CharacterSink, CharacterSinkFront, ESAConst}
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.environment.CheckpointConfig
@@ -26,15 +26,15 @@ object CharacterKillAnalyzer {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
 
-    env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
+    //env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
     // 设置Checkpoint间隔
-    env.enableCheckpointing(60 * 1000)
-    //Checkpoint之间的最小时间间隔
-    env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
-    env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
-    // RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
-    env.getCheckpointConfig.enableExternalizedCheckpoints(
-      CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
+    //env.enableCheckpointing(60 * 1000)
+    ////Checkpoint之间的最小时间间隔
+    //env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
+    //env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+    //// RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
+    //env.getCheckpointConfig.enableExternalizedCheckpoints(
+    //  CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
 
     val zkillInfoStream = KafkaSource.GetZKillInfoStream(env, this.getClass.getName)
     val result = zkillInfoStream
@@ -54,25 +54,24 @@ object CharacterKillAnalyzer {
           )
         })
         res
-      })
+      }).setParallelism(3)
       .keyBy(_.characterId)
       .window(
         SlidingEventTimeWindows.of(
-          Time.days(1),
+          Time.hours(1),
           Time.minutes(10)
         ))
       // 延迟严重的数据到侧输出流
       // TODO
       .sideOutputLateData(KafkaSource.LATE_DATE_TAG_ATTACKER)
       .aggregate(
-        new AggregateFunction[Attacker, CharacterSink, CharacterSink] {
+        new AggregateFunction[Attacker, CharacterSinkFront, CharacterSinkFront] {
 
-          override def createAccumulator(): CharacterSink = CharacterSink(0, 0, 0, 0, "", List(), List(), List())
+          override def createAccumulator(): CharacterSinkFront = CharacterSinkFront(0, 0, 0, 0, "", List(), List(), List())
 
-          override def add(value: Attacker, accumulator: CharacterSink): CharacterSink = {
-
+          override def add(value: Attacker, accumulator: CharacterSinkFront): CharacterSinkFront = {
             //println(s"valueLabels>>>>>${value.labels}\taccumulatorLabels>>>>>${accumulator.labels}\taddLabels>>>>>${value.labels+ accumulator.labels}")
-            CharacterSink(
+            CharacterSinkFront(
               value.characterId,
               accumulator.finalShoot + (if (value.finalBlow) 1 else 0),
               accumulator.killQuantity + 1,
@@ -85,10 +84,10 @@ object CharacterKillAnalyzer {
             )
           }
 
-          override def getResult(accumulator: CharacterSink): CharacterSink = accumulator
+          override def getResult(accumulator: CharacterSinkFront): CharacterSinkFront = accumulator
 
-          override def merge(a: CharacterSink, b: CharacterSink): CharacterSink = {
-            CharacterSink(
+          override def merge(a: CharacterSinkFront, b: CharacterSinkFront): CharacterSinkFront = {
+            CharacterSinkFront(
               a.characterId,
               a.finalShoot + b.finalShoot,
               a.killQuantity + b.killQuantity,
@@ -100,17 +99,17 @@ object CharacterKillAnalyzer {
             )
           }
         },
-        new WindowFunction[CharacterSink, CharacterSink, Int, TimeWindow] {
-          override def apply(key: Int, window: TimeWindow, input: Iterable[CharacterSink],
-                             out: Collector[CharacterSink]): Unit = {
+        new WindowFunction[CharacterSinkFront, CharacterSinkFront, Int, TimeWindow] {
+          override def apply(key: Int, window: TimeWindow, input: Iterable[CharacterSinkFront],
+                             out: Collector[CharacterSinkFront]): Unit = {
             val dateFormat = new SimpleDateFormat(ESAConst.DATE_FORMAT_yyyyMMddHH)
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
             var dt = dateFormat.format(window.getEnd)
-            if (window.getEnd % 3600000 == 0) {
+            if (window.getEnd % (1000 * 60 * 60) == 0) {
               dt = dateFormat.format(window.getStart)
             }
 
-            val result = CharacterSink(
+            val result = CharacterSinkFront(
               input.head.characterId,
               input.head.finalShoot,
               input.head.killQuantity,
@@ -128,11 +127,26 @@ object CharacterKillAnalyzer {
             LOG.info(s"start: ${start}\tend: ${end}\t${result}")
           }
         }
-      )
+      ).setParallelism(3)
       .map(character => {
-        val labels = character.labels.groupBy(_._1).mapValues(_.size).toList.sortBy(_._2).reverse
-        val shipTypes = character.shipTypes.groupBy(_._1).mapValues(_.size).toList.sortBy(_._2).reverse
-        val solarSystems = character.solarSystems.groupBy(_._1).mapValues(_.size).toList.sortBy(_._2).reverse
+        var labels = ""
+        var shipTypes = ""
+        var solarSystems = ""
+
+        character.labels.groupBy(_._1).mapValues(_.size).foreach(label => {
+          labels += label._1 + ":" + label._2 + ","
+        })
+        character.shipTypes.groupBy(_._1).mapValues(_.size).foreach(shipType => {
+          shipTypes += shipType._1 + ":" + shipType._2 + ","
+        })
+        character.solarSystems.groupBy(_._1).mapValues(_.size).foreach(solarSystem => {
+          solarSystems += solarSystem._1 + ":" + solarSystem._2 + ","
+        })
+
+        labels = labels.substring(0, labels.length - 1)
+        shipTypes = shipTypes.substring(0, shipTypes.length - 1)
+        solarSystems = solarSystems.substring(0, solarSystems.length - 1)
+
         CharacterSink(
           character.characterId,
           character.finalShoot,
@@ -145,7 +159,8 @@ object CharacterKillAnalyzer {
         )
       }).setParallelism(3)
 
-    result.addSink(new MySQLSink[CharacterSink](classOf[CharacterSink])).setParallelism(3)
+    result
+      .addSink(new MySQLSink[CharacterSink](classOf[CharacterSink])).setParallelism(3)
 
     env.execute(this.getClass.getName)
   }

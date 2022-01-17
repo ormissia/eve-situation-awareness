@@ -25,15 +25,15 @@ object SolarSystemKillAnalyzer {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
-    env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
-    // 设置Checkpoint间隔
-    env.enableCheckpointing(60 * 1000)
-    //Checkpoint之间的最小时间间隔
-    env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
-    env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
-    // RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
-    env.getCheckpointConfig.enableExternalizedCheckpoints(
-      CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
+    //env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
+    //// 设置Checkpoint间隔
+    //env.enableCheckpointing(10 * 1000)
+    ////Checkpoint之间的最小时间间隔
+    //env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
+    //env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+    //// RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
+    //env.getCheckpointConfig.enableExternalizedCheckpoints(
+    //  CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
 
     // 0         1      2    3    4   5           6        7      8         9
     // timeStamp killId hash solo npc solarSystem iskValue victim attackers labels...

@@ -27,40 +27,21 @@ class MySQLSink[T](classType: Class[_ <: T]) extends RichSinkFunction[T] {
     } else if (classType.getName.equals(classOf[CharacterSink].getName)) {
       val info = value.asInstanceOf[CharacterSink]
 
-      var labels = ""
-      var shipTypes = ""
-      var solarSystems = ""
-
-      for (label <- info.labels) {
-        labels += label._1 + ":" + label._2 + ","
-      }
-      labels = labels.substring(0, labels.length - 1)
-
-      for (shipType <- info.shipTypes) {
-        shipTypes += shipType._1 + ":" + shipType._2 + ","
-      }
-      shipTypes = shipTypes.substring(0, shipTypes.length - 1)
-
-      for (solarSystem <- info.solarSystems) {
-        solarSystems += solarSystem._1 + ":" + solarSystem._2 + ","
-      }
-      solarSystems = solarSystems.substring(0, solarSystems.length - 1)
-
       pst.setString(1, info.dt)
       pst.setInt(2, info.characterId)
       pst.setInt(3, info.finalShoot)
       pst.setInt(4, info.killQuantity)
       pst.setDouble(5, info.killValue)
-      pst.setString(6, labels)
-      pst.setString(7, shipTypes)
-      pst.setString(8, solarSystems)
+      pst.setString(6, info.labels)
+      pst.setString(7, info.shipTypes)
+      pst.setString(8, info.solarSystems)
 
       pst.setInt(9, info.finalShoot)
       pst.setInt(10, info.killQuantity)
       pst.setDouble(11, info.killValue)
-      pst.setString(12, labels)
-      pst.setString(13, shipTypes)
-      pst.setString(14, solarSystems)
+      pst.setString(12, info.labels)
+      pst.setString(13, info.shipTypes)
+      pst.setString(14, info.solarSystems)
 
       pst.executeUpdate()
     }
