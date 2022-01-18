@@ -26,15 +26,15 @@ object CharacterKillAnalyzer {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
 
-    //env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
+    env.getCheckpointConfig.setCheckpointStorage("hdfs://bigdata/flink/checkpoint/" + this.getClass.getName)
     // 设置Checkpoint间隔
-    //env.enableCheckpointing(60 * 1000)
-    ////Checkpoint之间的最小时间间隔
-    //env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
-    //env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
-    //// RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
-    //env.getCheckpointConfig.enableExternalizedCheckpoints(
-    //  CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
+    env.enableCheckpointing(60 * 1000)
+    //Checkpoint之间的最小时间间隔
+    env.getCheckpointConfig.setMinPauseBetweenCheckpoints(1000)
+    env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+    // RETAIN_ON_CANCELLATION flink任务取消后，checkpoint数据会被保留
+    env.getCheckpointConfig.enableExternalizedCheckpoints(
+      CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
 
     val zkillInfoStream = KafkaSource.GetZKillInfoStream(env, this.getClass.getName)
     val result = zkillInfoStream
