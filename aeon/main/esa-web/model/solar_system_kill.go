@@ -62,10 +62,6 @@ func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSy
 	}
 	db.Group(dtFormat)
 
-	if s.SolarSystemId != 0 {
-		db.Where("solar_system_id = ?", s.SolarSystemId)
-	}
-
 	if params.PageNo != 0 {
 		db.Offset((params.PageNo - 1) * params.PageSize)
 	}
@@ -75,6 +71,10 @@ func (s *SolarSystemKill) SelectSolarSystem(params BaseParams) (result []SolarSy
 	} else {
 		// 默认限制8760条结果
 		db.Limit(8760)
+	}
+
+	if s.SolarSystemId != 0 {
+		db.Where("solar_system_id = ?", s.SolarSystemId)
 	}
 
 	db.Order("dt")

@@ -39,10 +39,11 @@ const (
 	ErrUserNotFound
 	ErrUserNotFoundOrErr
 
-	// 数据错误
+	// ErrMapReduceError 数据错误
+	ErrMapReduceError ResponseCode = 1300 + iota
 
 	// ErrCodeMySQLError 数据错误
-	ErrCodeMySQLError ResponseCode = 1300 + iota
+	ErrCodeMySQLError ResponseCode = 1400 + iota
 )
 
 // 消息码对应的消息
@@ -57,6 +58,8 @@ var responseMsgMap = map[ResponseCode]string{
 
 	ErrUserNotFound:      "用户不存在",
 	ErrUserNotFoundOrErr: "用户不存在或密码错误",
+
+	ErrMapReduceError: "数据聚合错误",
 
 	ErrCodeMySQLError: "数据库错误",
 }

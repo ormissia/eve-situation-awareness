@@ -11,8 +11,8 @@ class Homepage extends Component {
 
     state = {
         conditions: {
-            group: 'day',
-            startTime: moment().startOf('day').add(1, 'days').subtract(1, 'weeks').valueOf(),
+            group: 'hour',
+            startTime: moment().subtract(1, 'weeks').valueOf(),
             endTime: moment().valueOf(),
             solarSystem: '',
         }

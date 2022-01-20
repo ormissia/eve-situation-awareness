@@ -20,27 +20,28 @@ zap:
 
 # mysql configuration
 mysql-esa:
-  path: mysql:3306
-#  path: 127.0.0.1:3306
+#  path: mysql:3306
+  path: 127.0.0.1:3306
   dbname: eve_situation_awareness
   username: root
-  password: 123456
+  password: 123
   config: charset=utf8&parseTime=True&loc=Local
   max-idle-conns: 10
   max-open-conns: 100
 
 mysql-basic:
-  path: mysql:3306
-#  path: 127.0.0.1:3306
+#  path: mysql:3306
+  path: 127.0.0.1:3306
   dbname: eve_basic_info
   username: root
-  password: 123456
+  password: 123
   config: charset=utf8&parseTime=True&loc=Local
   max-idle-conns: 10
   max-open-conns: 100
 
 # redis configuration
 redis:
-  path: redis:6379
+#  path: redis:6379
+  path: 127.0.0.1:6379
   password:
   db: 0

@@ -35,9 +35,9 @@ function HomepageHeader(props) {
                         defaultValue={[moment(props.initConditions.startTime), moment(props.initConditions.endTime)]}
                         ranges={{
                             'Last 24 Hours': [moment().subtract(1, 'days'), moment()],
-                            'Last Week': [moment().startOf('day').add(1, 'days').subtract(1, 'weeks'), moment()],
-                            'Last Month': [moment().startOf('day').add(1, 'days').subtract(1, 'months'), moment()],
-                            'Last Year': [moment().startOf('day').add(1, 'days').subtract(1, 'years'), moment()],
+                            'Last Week': [moment().subtract(1, 'weeks'), moment()],
+                            'Last Month': [moment().subtract(1, 'months'), moment()],
+                            'Last Year': [moment().subtract(1, 'years'), moment()],
                             'This Month': [moment().startOf('month'), moment()],
                             'This Year': [moment().startOf('year'), moment()],
                         }}

@@ -1,0 +1,3 @@
+GET http://localhost:8080/web/analysis/character_kill?time_type=day&start_time_stamp=1637913001994&end_time_stamp=1640534399999&page_size=&character_id=
+Accept: application/json
+
